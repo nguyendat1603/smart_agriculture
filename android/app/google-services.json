@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "1059114138043",
+    "firebase_url": "https://project1-bacb2-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "project1-bacb2",
+    "storage_bucket": "project1-bacb2.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1059114138043:android:a391263c7ee63083cb6c9e",
+        "android_client_info": {
+          "package_name": "com.example.smart_agriculture_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCE6l_Tyhb-cLUPj_wU-KfpUqQi5IWleUU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

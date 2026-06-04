@@ -1,3 +1,11 @@
+plugins {
+    // Các dòng id(...) có sẵn của Flutter giữ nguyên
+
+    
+    // THÊM CHÍNH XÁC DÒNG NÀY VÀO KHỐI PLUGINS:
+    id("com.google.gms.google-services") version "4.4.1" apply false
+}
+
 allprojects {
     repositories {
         google()

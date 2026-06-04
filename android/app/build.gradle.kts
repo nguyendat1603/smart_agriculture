@@ -1,7 +1,10 @@
 plugins {
-    id("com.android.application")
+   id("com.android.application")
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id("dev.flutter.flutter-gradle-plugin")
+    
+    // THÊM DÒNG NÀY (Cú pháp chuẩn Kotlin DSL dùng dấu ngoặc kép và ngoặc đơn)
+    id("com.google.gms.google-services")
 }
 
 android {
