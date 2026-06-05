@@ -1,0 +1,1 @@
+NEED : ESP32 & ANDROID 13+
