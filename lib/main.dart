@@ -3,7 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'viewmodels/sensor_viewmodel.dart';
 import 'views/login_view.dart';
-import 'views/dashboard_view.dart';
+import 'views/main_layout.dart';
+import 'theme/app_theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -40,12 +41,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Smart Agriculture',
+      title: 'AgriPulse AI',
       debugShowCheckedModeBanner: false,
+      theme: AppTheme.lightTheme,
       initialRoute: '/login',
       routes: {
         '/login': (context) => const LoginView(),
-        '/dashboard': (context) => const DashboardView(),
+        '/dashboard': (context) => const MainLayout(),
       },
     );
   }

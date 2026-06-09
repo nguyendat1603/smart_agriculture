@@ -4,21 +4,24 @@ import 'package:firebase_database/firebase_database.dart';
 import '../models/sensor_model.dart';
 
 class SensorViewModel extends ChangeNotifier {
-  // Cấu hình các biến lưu trữ cục bộ trên giao diện
+  // Biến lưu trữ số liệu hiện tại
   double _nhietDo = 0.0;
   double _doAmKhongKhi = 0.0;
   double _doAmDat = 0.0;
   double _mucNuoc = 0.0;
   double _doAmMua = 0.0;
+  // Thêm 1 biến vào phần khai báo đầu class SensorViewModel
+  bool _isPumpOn = false;
+  bool get isPumpOn => _isPumpOn;
 
   bool isRaining = false;
   Timer? _rainTimer;
+
+  // Mảng chứa tối đa 90 bản ghi lịch sử phục vụ biểu đồ dịch chuyển
   final List<SensorModel> _historyLogs = [];
 
-  // Khởi tạo tham chiếu đến nút dữ liệu gốc trên Firebase của bạn
-  final DatabaseReference _dbRef = FirebaseDatabase.instance.ref("NongNghiep");
+  final DatabaseReference _dbRef = FirebaseDatabase.instance.ref();
 
-  // Getters để giao diện Dashboard kết nối lấy dữ liệu
   double get nhietDo => _nhietDo;
   double get doAmKhongKhi => _doAmKhongKhi;
   double get doAmDat => _doAmDat;
@@ -26,54 +29,68 @@ class SensorViewModel extends ChangeNotifier {
   double get doAmMua => _doAmMua;
   List<SensorModel> get historyLogs => _historyLogs;
 
+  DateTime? _lastLogTime;
+
   SensorViewModel() {
-    // Kích hoạt lắng nghe dữ liệu thời gian thực từ Firebase ngay khi khởi động app
-    _listenToFirebaseRealtime();
+    _listenToRealtimeData();
   }
 
-  void _listenToFirebaseRealtime() {
-    _dbRef.onValue.listen((DatabaseEvent event) {
-      final data = event.snapshot.value as Map<dynamic, dynamic>?;
+  // Lắng nghe dữ liệu tức thời để cập nhật các thẻ trạng thái
+  void _listenToRealtimeData() {
+    _dbRef
+        .child("NongNghiep")
+        .onValue
+        .listen(
+          (DatabaseEvent event) {
+            final data = event.snapshot.value;
 
-      if (data != null) {
-        // Ép kiểu dữ liệu an toàn tránh lỗi crash nếu Firebase trả về dạng int thay vì double
-        double parseValue(dynamic val) {
-          if (val == null) return 0.0;
-          return double.tryParse(val.toString()) ?? 0.0;
-        }
+            if (data is Map) {
+              double parseValue(dynamic val) {
+                if (val == null) return 0.0;
+                return double.tryParse(val.toString()) ?? 0.0;
+              }
 
-        // Đọc chính xác các Key từ dữ liệu gốc Firebase của bạn
-        _updateSensorData(
-          nhietDo: parseValue(data['NhietDo']),
-          doAmKhongKhi: parseValue(data['DoAmKhongKhi']),
-          doAmDat: parseValue(data['DoAmDat']),
-          mucNuoc: parseValue(data['MucNuoc']),
-          doAmMua: parseValue(
-            data['DoAm'],
-          ), // 'DoAm' trên Firebase của bạn là cảm biến mưa
+              _nhietDo = parseValue(data['NhietDo']);
+              _doAmKhongKhi = parseValue(data['DoAmKhongKhi']);
+              _doAmDat = parseValue(data['DoAmDat']);
+              _mucNuoc = parseValue(data['MucNuoc']);
+              _doAmMua = parseValue(data['DoAm']);
+
+              // -- THÊM DÒNG NÀY ĐỂ ĐỌC TRẠNG THÁI MÁY BƠM --
+              _isPumpOn =
+                  data['TrangThaiBom'] ==
+                  true; // Nếu Firebase trả về true thì gán true
+
+              _handleRainLogic();
+              
+              // Cập nhật lịch sử biểu đồ (giới hạn 10 giây/lần)
+              final now = DateTime.now();
+              if (_lastLogTime == null || now.difference(_lastLogTime!).inSeconds >= 10) {
+                _lastLogTime = now;
+                _historyLogs.add(SensorModel(
+                  nhietDo: _nhietDo,
+                  doAmKhongKhi: _doAmKhongKhi,
+                  doAmDat: _doAmDat,
+                  mucNuoc: _mucNuoc,
+                  doAmMua: _doAmMua,
+                  timestamp: now,
+                ));
+                if (_historyLogs.length > 90) {
+                  _historyLogs.removeAt(0);
+                }
+              }
+
+              notifyListeners();
+            }
+          },
+          onError: (error) {
+            debugPrint("Lỗi kết nối Firebase Realtime Database: $error");
+          },
         );
-      }
-    }, onError: (error) {
-      debugPrint("Lỗi kết nối Firebase Realtime Database: $error");
-    });
   }
 
-  void _updateSensorData({
-    required double nhietDo,
-    required double doAmKhongKhi,
-    required double doAmDat,
-    required double mucNuoc,
-    required double doAmMua,
-  }) {
-    _nhietDo = nhietDo;
-    _doAmKhongKhi = doAmKhongKhi;
-    _doAmDat = doAmDat;
-    _mucNuoc = mucNuoc;
-    _doAmMua = doAmMua;
 
-    DateTime now = DateTime.now();
-
-    // NGHIỆP VỤ 1: Đệm thời gian phát hiện trời mưa (1 phút liên tục)
+  void _handleRainLogic() {
     if (_doAmMua > 10.0) {
       if (_rainTimer == null && !isRaining) {
         _rainTimer = Timer(const Duration(minutes: 1), () {
@@ -88,29 +105,8 @@ class SensorViewModel extends ChangeNotifier {
         isRaining = false;
       }
     }
-
-    // NGHIỆP VỤ 2: Ghi nhật ký tiến trình cuốn chiếu trong dải 15 phút
-    _historyLogs.add(
-      SensorModel(
-        nhietDo: _nhietDo,
-        doAmKhongKhi: _doAmKhongKhi,
-        doAmDat: _doAmDat,
-        mucNuoc: _mucNuoc,
-        doAmMua: _doAmMua,
-        timestamp: now,
-      ),
-    );
-
-    // Giải phóng bộ nhớ, xóa bỏ các bản ghi cũ hơn 15 phút trước
-    _historyLogs.removeWhere(
-      (log) => now.difference(log.timestamp).inMinutes > 15,
-    );
-
-    // Phát lệnh cho toàn bộ Widget giao diện (Thẻ trạng thái + Biểu đồ cột) cập nhật lại số liệu
-    notifyListeners();
   }
 
-  // Phân vùng màu sắc độ ẩm đất theo tài liệu nghiệp vụ
   String get soilStatus {
     if (_doAmDat >= 60.0 && _doAmDat <= 80.0) return "TỐT";
     if (_doAmDat >= 25.0 && _doAmDat < 60.0) return "BẮT ĐẦU KHÔ";
@@ -125,5 +121,19 @@ class SensorViewModel extends ChangeNotifier {
 
   bool canTurnOnPump() {
     return _mucNuoc > 0.0;
+  }
+
+  Future<void> togglePump() async {
+    // Chỉ cho phép bật nếu mức nước > 0. Nếu đang bật rồi thì luôn cho phép ấn để tắt.
+    if (canTurnOnPump() || _isPumpOn) {
+      bool newState =
+          !_isPumpOn; // Đảo trạng thái hiện tại (Đang Tắt thì thành Bật)
+
+      // Ghi đè trạng thái mới lên Firebase
+      await _dbRef.child("NongNghiep").update({"TrangThaiBom": newState});
+
+      // Lưu ý: Không cần gọi notifyListeners() ở đây vì hàm _listenToRealtimeData()
+      // sẽ tự động phát hiện Firebase vừa bị thay đổi và cập nhật lại giao diện.
+    }
   }
 }

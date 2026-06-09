@@ -1,3 +1,4 @@
+
 class SensorModel {
   final double nhietDo;
   final double doAmKhongKhi;

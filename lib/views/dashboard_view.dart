@@ -2,232 +2,240 @@ import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:provider/provider.dart';
 import '../viewmodels/sensor_viewmodel.dart';
+import '../theme/app_theme.dart';
 
 class DashboardView extends StatelessWidget {
   const DashboardView({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    // Lắng nghe dữ liệu thay đổi từ ViewModel
-    final vm = Provider.of<SensorViewModel>(context);
-
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Giám sát cây trồng"),
-        backgroundColor: Colors.green,
-        actions: [
-          // Hiển thị Icon thời tiết mưa/nắng tự động theo nghiệp vụ 1
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Icon(
-              vm.isRaining ? Icons.thunderstorm : Icons.wb_sunny,
-              color: vm.isRaining ? Colors.blue : Colors.yellow,
+  Widget _buildMicroChart(List<FlSpot> spots, Color color) {
+    if (spots.isEmpty) return const SizedBox();
+    
+    double minX = 0;
+    double maxX = spots.length > 1 ? (spots.length - 1).toDouble() : 1.0;
+    
+    return LineChart(
+      LineChartData(
+        gridData: const FlGridData(show: false),
+        titlesData: const FlTitlesData(show: false),
+        borderData: FlBorderData(show: false),
+        minX: minX,
+        maxX: maxX,
+        lineTouchData: const LineTouchData(enabled: false),
+        lineBarsData: [
+          LineChartBarData(
+            spots: spots,
+            isCurved: true,
+            color: color,
+            barWidth: 2.5,
+            isStrokeCapRound: true,
+            dotData: const FlDotData(show: false),
+            belowBarData: BarAreaData(
+              show: true,
+              color: color.withValues(alpha: 0.15),
             ),
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            // ---- KHU VỰC HIỂN THỊ CÁC THẺ TRẠNG THÁI HIỆN TẠI ----
-            Row(
-              children: [
-                // Thẻ Độ ẩm đất đổi màu theo 3 vùng nghiệp vụ
-                Expanded(
-                  child: Card(
-                    color: vm.soilColor.withValues(alpha: 0.2),
-                    shape: RoundedRectangleBorder(
-                      side: BorderSide(color: vm.soilColor, width: 2),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        children: [
-                          Text(
-                            "Độ Ẩm Đất: ${vm.doAmDat}%",
-                            style: const TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(height: 5),
-                          Text(
-                            vm.soilStatus,
-                            style: TextStyle(
-                              color: vm.soilColor,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 15),
+    );
+  }
 
-            // NGHIỆP VỤ 3: TÌNH TRẠNG MỨC NƯỚC BỒN CHỨA
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+  Widget _buildSensorCard({
+    required IconData icon,
+    required Color iconColor,
+    required String title,
+    required String subtitle,
+    required String statusText,
+    required Color statusColor,
+    required String value,
+    required String unit,
+    required String trendStr,
+    required IconData trendIcon,
+    required List<FlSpot> chartSpots,
+  }) {
+    return GlassContainer(
+      margin: const EdgeInsets.only(bottom: 16),
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      color: AppTheme.surfaceContainerHighest,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Icon(icon, color: iconColor),
+                  ),
+                  const SizedBox(width: 12),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppTheme.onSurface)),
+                      Text(subtitle, style: const TextStyle(fontSize: 12, color: AppTheme.onSurfaceVariant)),
+                    ],
+                  ),
+                ],
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                decoration: BoxDecoration(
+                  color: statusColor.withValues(alpha: 0.15),
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Row(
                   children: [
-                    Text(
-                      "Mực nước bồn chứa: ${vm.mucNuoc}%",
-                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    Container(
+                      width: 8, height: 8,
+                      decoration: BoxDecoration(color: statusColor, shape: BoxShape.circle),
                     ),
-                    const SizedBox(height: 10),
-                    LinearProgressIndicator(
-                      value: vm.mucNuoc / 100,
-                      backgroundColor: Colors.grey[300],
-                      valueColor: AlwaysStoppedAnimation<Color>(
-                        vm.mucNuoc == 0 ? Colors.red : Colors.blue,
-                      ),
-                      minHeight: 15,
-                    ),
-                    if (vm.mucNuoc == 0)
-                      const Padding(
-                        padding: EdgeInsets.only(top: 8.0),
-                        child: Text(
-                          "CẠN NƯỚC",
-                          style: TextStyle(
-                            color: Colors.red,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
+                    const SizedBox(width: 6),
+                    Text(statusText, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: statusColor)),
                   ],
                 ),
               ),
-            ),
-            const SizedBox(height: 20),
-
-            // ---- NGHIỆP VỤ BIỂU ĐỒ CỘT 100 CHỨA CÁC THUỘC TÍNH (15 PHÚT) ----
-            const Text(
-              "Sơ đồ thuộc tính trong 15 phút qua (Thang 100)",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 10),
-            SizedBox(
-              height: 250,
-              child: BarChart(
-                BarChartData(
-                  maxY: 100, // Chia theo dải cột tối đa 100 chuẩn chỉ
-                  barGroups: [
-                    BarChartGroupData(
-                      x: 0,
-                      barRods: [
-                        BarChartRodData(
-                          toY: vm.nhietDo,
-                          color: Colors.orange,
-                          width: 15,
-                        ),
-                      ],
-                    ),
-                    BarChartGroupData(
-                      x: 1,
-                      barRods: [
-                        BarChartRodData(
-                          toY: vm.doAmKhongKhi,
-                          color: Colors.blue,
-                          width: 15,
-                        ),
-                      ],
-                    ),
-                    BarChartGroupData(
-                      x: 2,
-                      barRods: [
-                        BarChartRodData(
-                          toY: vm.doAmDat,
-                          color: vm.soilColor,
-                          width: 15,
-                        ),
-                      ],
-                    ),
-                    BarChartGroupData(
-                      x: 3,
-                      barRods: [
-                        BarChartRodData(
-                          toY: vm.mucNuoc,
-                          color: Colors.teal,
-                          width: 15,
-                        ),
-                      ],
-                    ),
-                    BarChartGroupData(
-                      x: 4,
-                      barRods: [
-                        BarChartRodData(
-                          toY: vm.doAmMua,
-                          color: Colors.indigo,
-                          width: 15,
-                        ),
-                      ],
-                    ),
-                  ],
-                  titlesData: FlTitlesData(
-                    bottomTitles: AxisTitles(
-                      sideTitles: SideTitles(
-                        showTitles: true,
-                        getTitlesWidget: (value, meta) {
-                          switch (value.toInt()) {
-                            case 0:
-                              return const Text('Nhiệt độ');
-                            case 1:
-                              return const Text('Ẩm khí');
-                            case 2:
-                              return const Text('Ẩm đất');
-                            case 3:
-                              return const Text('Mực nước');
-                            case 4:
-                              return const Text('Ẩm mưa');
-                            default:
-                              return const Text('');
-                          }
-                        },
-                      ),
-                    ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.baseline,
+                    textBaseline: TextBaseline.alphabetic,
+                    children: [
+                      Text(value, style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold, color: iconColor)),
+                      Text(unit, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: AppTheme.onSurfaceVariant)),
+                    ],
                   ),
-                ),
+                  const SizedBox(height: 4),
+                  Row(
+                    children: [
+                      Icon(trendIcon, size: 14, color: AppTheme.onSurfaceVariant),
+                      const SizedBox(width: 4),
+                      Text(trendStr, style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: AppTheme.onSurfaceVariant)),
+                    ],
+                  ),
+                ],
               ),
-            ),
-            const SizedBox(height: 25),
-
-            // ---- ĐIỀU KHIỂN MÁY BƠM TỰ ĐỘNG + CHẶN LOCKOUT ----
-            ElevatedButton.icon(
-              icon: const Icon(Icons.water_drop),
-              label: const Text("KÍCH HOẠT MÁY BƠM TỰ ĐỘNG"),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.green,
-                minimumSize: const Size.fromHeight(50),
+              SizedBox(
+                width: 120,
+                height: 60,
+                child: _buildMicroChart(chartSpots, iconColor),
               ),
-              onPressed: () {
-                if (!vm.canTurnOnPump()) {
-                  // Nghiệp vụ chặn điều khiển: Bật Pop-up khẩn cấp nếu bồn cạn
-                  showDialog(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                      title: const Text("Cảnh Báo Hệ Thống"),
-                      content: const Text(
-                        "Không thể bật máy bơm do bồn chứa đã hết nước. Vui lòng bơm nước vào bồn trước để tránh cháy máy.",
-                      ),
-                      actions: [
-                        TextButton(
-                          onPressed: () => Navigator.pop(context),
-                          child: const Text("Đã hiểu"),
-                        ),
-                      ],
-                    ),
-                  );
-                } else {
-                  // Thực hiện bật bơm bình thường
-                }
-              },
-            ),
-          ],
-        ),
+            ],
+          ),
+        ],
       ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final vm = Provider.of<SensorViewModel>(context);
+
+    List<FlSpot> tempSpots = [];
+    List<FlSpot> airHumidSpots = [];
+    List<FlSpot> soilHumidSpots = [];
+    List<FlSpot> waterLevelSpots = [];
+    List<FlSpot> rainSpots = [];
+
+    for (int i = 0; i < vm.historyLogs.length; i++) {
+      final log = vm.historyLogs[i];
+      tempSpots.add(FlSpot(i.toDouble(), log.nhietDo));
+      airHumidSpots.add(FlSpot(i.toDouble(), log.doAmKhongKhi));
+      soilHumidSpots.add(FlSpot(i.toDouble(), log.doAmDat));
+      waterLevelSpots.add(FlSpot(i.toDouble(), log.mucNuoc));
+      rainSpots.add(FlSpot(i.toDouble(), log.doAmMua));
+    }
+
+    return ListView(
+      padding: const EdgeInsets.all(16),
+      children: [
+        const Text("Live Sensor Data", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: AppTheme.onSurface)),
+        const SizedBox(height: 4),
+        const Text("Real-time monitoring across all field zones.", style: TextStyle(fontSize: 14, color: AppTheme.onSurfaceVariant)),
+        const SizedBox(height: 24),
+        
+        _buildSensorCard(
+          icon: Icons.water_drop,
+          iconColor: AppTheme.secondary,
+          title: "Độ ẩm không khí",
+          subtitle: "Tối ưu: 60-70%",
+          statusText: vm.doAmKhongKhi >= 60 && vm.doAmKhongKhi <= 70 ? "Healthy" : "Warning",
+          statusColor: vm.doAmKhongKhi >= 60 && vm.doAmKhongKhi <= 70 ? AppTheme.secondary : AppTheme.error,
+          value: vm.doAmKhongKhi.toStringAsFixed(1),
+          unit: "%",
+          trendStr: "Dynamic Realtime",
+          trendIcon: Icons.show_chart,
+          chartSpots: airHumidSpots,
+        ),
+        
+        _buildSensorCard(
+          icon: Icons.thermostat,
+          iconColor: AppTheme.error,
+          title: "Nhiệt độ",
+          subtitle: "Tối ưu: 22-26°C",
+          statusText: vm.nhietDo > 26 ? "Elevated" : (vm.nhietDo < 22 ? "Cold" : "Optimal"),
+          statusColor: vm.nhietDo > 26 ? AppTheme.error : AppTheme.tertiary,
+          value: vm.nhietDo.toStringAsFixed(1),
+          unit: "°C",
+          trendStr: "Dynamic Realtime",
+          trendIcon: Icons.show_chart,
+          chartSpots: tempSpots,
+        ),
+
+        _buildSensorCard(
+          icon: Icons.grass,
+          iconColor: AppTheme.primaryContainer,
+          title: "Độ ẩm đất",
+          subtitle: "Tối ưu: 40-50%",
+          statusText: vm.doAmDat < 40 ? "Dry" : "Healthy",
+          statusColor: vm.doAmDat < 40 ? Colors.orange : AppTheme.primary,
+          value: vm.doAmDat.toStringAsFixed(1),
+          unit: "%",
+          trendStr: "Dynamic Realtime",
+          trendIcon: Icons.show_chart,
+          chartSpots: soilHumidSpots,
+        ),
+
+        _buildSensorCard(
+          icon: Icons.waves,
+          iconColor: Colors.blue.shade700,
+          title: "Mực nước bồn",
+          subtitle: "Sức chứa: 10,000L",
+          statusText: vm.mucNuoc < 20 ? "Low Level" : "Normal",
+          statusColor: vm.mucNuoc < 20 ? AppTheme.error : Colors.blue.shade700,
+          value: vm.mucNuoc.toStringAsFixed(1),
+          unit: "%",
+          trendStr: "Dynamic Realtime",
+          trendIcon: Icons.show_chart,
+          chartSpots: waterLevelSpots,
+        ),
+
+        _buildSensorCard(
+          icon: Icons.water_drop_outlined,
+          iconColor: Colors.indigo,
+          title: "Cảm biến mưa",
+          subtitle: "Mưa: >10%",
+          statusText: vm.doAmMua > 10 ? "Raining" : "Clear",
+          statusColor: vm.doAmMua > 10 ? Colors.indigo : AppTheme.onSurfaceVariant,
+          value: vm.doAmMua.toStringAsFixed(1),
+          unit: "%",
+          trendStr: "Dynamic Realtime",
+          trendIcon: Icons.show_chart,
+          chartSpots: rainSpots,
+        ),
+      ],
     );
   }
 }
