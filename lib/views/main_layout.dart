@@ -4,6 +4,7 @@ import '../theme/app_theme.dart';
 import 'dashboard_view.dart';
 import 'automation_view.dart';
 import 'sensors_view.dart';
+import 'settings_view.dart';
 
 class MainLayout extends StatefulWidget {
   const MainLayout({super.key});
@@ -19,8 +20,7 @@ class _MainLayoutState extends State<MainLayout> {
     const DashboardView(),
     const SensorsView(),
     const AutomationView(),
-    const Center(child: Text("Reports")), // Placeholder
-    const Center(child: Text("Settings")), // Placeholder
+    const SettingsView(),
   ];
 
   @override
@@ -66,8 +66,7 @@ class _MainLayoutState extends State<MainLayout> {
                 _buildNavItem(Icons.dashboard, "Dashboard", 0),
                 _buildNavItem(Icons.sensors, "Sensors", 1),
                 _buildNavItem(Icons.precision_manufacturing, "Automation", 2),
-                _buildNavItem(Icons.analytics, "Reports", 3),
-                _buildNavItem(Icons.settings, "Settings", 4),
+                _buildNavItem(Icons.settings, "Settings", 3),
               ],
             ),
           ),

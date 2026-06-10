@@ -4,40 +4,41 @@ import 'dart:ui';
 import '../theme/app_theme.dart';
 import '../viewmodels/auth_viewmodel.dart';
 
-class LoginView extends StatefulWidget {
-  const LoginView({super.key});
+class RegisterView extends StatefulWidget {
+  const RegisterView({super.key});
 
   @override
-  State<LoginView> createState() => _LoginViewState();
+  State<RegisterView> createState() => _RegisterViewState();
 }
 
-class _LoginViewState extends State<LoginView> {
+class _RegisterViewState extends State<RegisterView> {
   bool _obscurePassword = true;
+  
+  final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  void _login() async {
+  void _register() async {
     final authVM = context.read<AuthViewModel>();
+    final name = _nameController.text.trim();
     final email = _emailController.text.trim();
+    final phone = _phoneController.text.trim();
     final password = _passwordController.text;
 
-    if (email.isEmpty || password.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Vui lòng nhập email và mật khẩu')));
+    if (name.isEmpty || email.isEmpty || phone.isEmpty || password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Vui lòng điền đủ thông tin')));
       return;
     }
 
     try {
-      await authVM.login(email, password);
+      await authVM.register(name, email, phone, password);
       if (mounted) {
-        Navigator.pushReplacementNamed(context, '/dashboard');
+        Navigator.pushNamed(context, '/otp');
       }
     } catch (e) {
-      final msg = e.toString().replaceAll("Exception: ", "");
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
-        if (msg.contains("chưa được xác thực")) {
-          Navigator.pushNamed(context, '/otp');
-        }
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString().replaceAll("Exception: ", ""))));
       }
     }
   }
@@ -53,7 +54,7 @@ class _LoginViewState extends State<LoginView> {
           // Decorative Background Elements
           Positioned(
             top: -100,
-            left: -50,
+            right: -50,
             child: Container(
               width: 300,
               height: 300,
@@ -64,22 +65,10 @@ class _LoginViewState extends State<LoginView> {
             ),
           ),
           Positioned(
-            top: 150,
-            right: -50,
+            bottom: -50,
+            left: -50,
             child: Container(
-              width: 200,
-              height: 300,
-              decoration: BoxDecoration(
-                color: AppTheme.tertiary.withValues(alpha: 0.1),
-                shape: BoxShape.circle,
-              ),
-            ),
-          ),
-          Positioned(
-            bottom: -100,
-            left: 100,
-            child: Container(
-              width: 400,
+              width: 300,
               height: 300,
               decoration: BoxDecoration(
                 color: AppTheme.secondary.withValues(alpha: 0.1),
@@ -87,22 +76,21 @@ class _LoginViewState extends State<LoginView> {
               ),
             ),
           ),
-          
-          // Main Content
+
           Center(
             child: SingleChildScrollView(
               padding: const EdgeInsets.all(24),
               child: Container(
-                constraints: const BoxConstraints(maxWidth: 400),
+                constraints: const BoxConstraints(maxWidth: 500),
                 decoration: BoxDecoration(
                   color: Colors.white.withValues(alpha: 0.8),
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(color: Colors.white.withValues(alpha: 0.5)),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.08),
+                      color: Colors.black.withValues(alpha: 0.1),
                       blurRadius: 24,
-                      offset: const Offset(0, 4),
+                      offset: const Offset(0, 8),
                     )
                   ],
                 ),
@@ -115,27 +103,8 @@ class _LoginViewState extends State<LoginView> {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          // Logo & Header
-                          Container(
-                            width: 64,
-                            height: 64,
-                            decoration: BoxDecoration(
-                              color: AppTheme.primaryContainer,
-                              shape: BoxShape.circle,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withValues(alpha: 0.1),
-                                  blurRadius: 4,
-                                )
-                              ],
-                            ),
-                            child: const Center(
-                              child: Icon(Icons.eco, color: AppTheme.onPrimaryContainer, size: 32),
-                            ),
-                          ),
-                          const SizedBox(height: 16),
                           const Text(
-                            'AgriPulse AI',
+                            'Tạo Tài Khoản',
                             style: TextStyle(
                               color: AppTheme.primary,
                               fontSize: 28,
@@ -144,54 +113,37 @@ class _LoginViewState extends State<LoginView> {
                           ),
                           const SizedBox(height: 8),
                           const Text(
-                            'Chào mừng bạn quay lại',
+                            'Vui lòng điền thông tin để bắt đầu sử dụng hệ thống.',
                             style: TextStyle(
                               color: AppTheme.onSurfaceVariant,
-                              fontSize: 16,
+                              fontSize: 14,
                             ),
+                            textAlign: TextAlign.center,
                           ),
                           const SizedBox(height: 32),
 
-                          // Form
-                          _buildTextField(
-                            controller: _emailController,
-                            label: 'Email',
-                            hint: 'nguyen.van.a@example.com',
-                            icon: Icons.mail,
-                          ),
+                          _buildTextField(controller: _nameController, label: 'Họ và Tên', hint: 'Nguyễn Văn A', icon: Icons.person),
+                          const SizedBox(height: 16),
+                          _buildTextField(controller: _emailController, label: 'Email', hint: 'email@example.com', icon: Icons.mail, keyboardType: TextInputType.emailAddress),
+                          const SizedBox(height: 16),
+                          _buildTextField(controller: _phoneController, label: 'Số điện thoại', hint: '090 123 4567', icon: Icons.phone, keyboardType: TextInputType.phone),
                           const SizedBox(height: 16),
                           
+                          // Password
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  const Text(
-                                    'Mật khẩu',
-                                    style: TextStyle(
-                                      color: AppTheme.onSurface,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w500,
-                                    ),
+                              const Padding(
+                                padding: EdgeInsets.only(bottom: 8),
+                                child: Text(
+                                  'Mật khẩu',
+                                  style: TextStyle(
+                                    color: AppTheme.onSurfaceVariant,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w500,
                                   ),
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.pushNamed(context, '/forgot_password');
-                                    },
-                                    style: TextButton.styleFrom(
-                                      padding: EdgeInsets.zero,
-                                      minimumSize: const Size(50, 20),
-                                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                    ),
-                                    child: const Text(
-                                      'Quên mật khẩu?',
-                                      style: TextStyle(color: AppTheme.primary, fontSize: 12),
-                                    ),
-                                  ),
-                                ],
+                                ),
                               ),
-                              const SizedBox(height: 8),
                               TextFormField(
                                 controller: _passwordController,
                                 obscureText: _obscurePassword,
@@ -227,11 +179,10 @@ class _LoginViewState extends State<LoginView> {
                               ),
                             ],
                           ),
-                          const SizedBox(height: 24),
+                          const SizedBox(height: 32),
 
-                          // Submit Button
                           ElevatedButton(
-                            onPressed: authVM.isLoading ? null : _login,
+                            onPressed: authVM.isLoading ? null : _register,
                             style: ElevatedButton.styleFrom(
                               backgroundColor: AppTheme.primary,
                               foregroundColor: Colors.white,
@@ -239,6 +190,7 @@ class _LoginViewState extends State<LoginView> {
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(24),
                               ),
+                              elevation: 4,
                             ),
                             child: authVM.isLoading 
                               ? const CircularProgressIndicator(color: Colors.white)
@@ -246,7 +198,7 @@ class _LoginViewState extends State<LoginView> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      'Đăng nhập',
+                                      'Đăng ký',
                                       style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                                     ),
                                     SizedBox(width: 8),
@@ -254,21 +206,21 @@ class _LoginViewState extends State<LoginView> {
                                   ],
                                 ),
                           ),
-                          
-                          const SizedBox(height: 32),
+                          const SizedBox(height: 24),
+
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               const Text(
-                                'Chưa có tài khoản? ',
+                                'Đã có tài khoản? ',
                                 style: TextStyle(color: AppTheme.onSurfaceVariant),
                               ),
                               GestureDetector(
                                 onTap: () {
-                                  Navigator.pushNamed(context, '/register');
+                                  Navigator.pop(context);
                                 },
                                 child: const Text(
-                                  'Đăng ký ngay',
+                                  'Đăng nhập',
                                   style: TextStyle(
                                     color: AppTheme.primary,
                                     fontWeight: FontWeight.bold,
@@ -290,7 +242,13 @@ class _LoginViewState extends State<LoginView> {
     );
   }
 
-  Widget _buildTextField({required TextEditingController controller, required String label, required String hint, required IconData icon}) {
+  Widget _buildTextField({
+    required TextEditingController controller,
+    required String label, 
+    required String hint, 
+    required IconData icon,
+    TextInputType? keyboardType,
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -299,7 +257,7 @@ class _LoginViewState extends State<LoginView> {
           child: Text(
             label,
             style: const TextStyle(
-              color: AppTheme.onSurface,
+              color: AppTheme.onSurfaceVariant,
               fontSize: 12,
               fontWeight: FontWeight.w500,
             ),
@@ -307,6 +265,7 @@ class _LoginViewState extends State<LoginView> {
         ),
         TextFormField(
           controller: controller,
+          keyboardType: keyboardType,
           decoration: InputDecoration(
             hintText: hint,
             prefixIcon: Icon(icon, color: AppTheme.outline),
