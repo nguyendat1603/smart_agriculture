@@ -240,17 +240,28 @@ class AuthViewModel extends ChangeNotifier {
   }
 
   // 4. Cập nhật hồ sơ (Update Profile)
-  Future<bool> updateProfile(String fullName, String phoneNumber, String farmLocation, String avatarUrl) async {
+  Future<bool> updateProfile(String fullName, String phoneNumber, String farmLocation, {String? currentAvatarUrl, dynamic avatarFile}) async {
     if (_currentUser == null) throw Exception("Bạn chưa đăng nhập.");
     _setLoading(true);
     try {
       final client = SupabaseService.client;
+      String finalAvatarUrl = currentAvatarUrl ?? '';
+
+      // Upload file to Supabase Storage if a new file is provided
+      if (avatarFile != null) {
+        final fileExt = avatarFile.path.split('.').last;
+        final fileName = '${DateTime.now().millisecondsSinceEpoch}.$fileExt';
+        final filePath = 'avatars/$_currentUserEmail/$fileName';
+        
+        await client.storage.from('avatars').upload(filePath, avatarFile);
+        finalAvatarUrl = client.storage.from('avatars').getPublicUrl(filePath);
+      }
 
       await client.from('users').update({
         'full_name': fullName,
         'phone_number': phoneNumber,
         'farm_location': farmLocation,
-        'avatar_url': avatarUrl,
+        'avatar_url': finalAvatarUrl,
       }).eq('id', _currentUser!.id);
 
       // Update local state
@@ -258,7 +269,7 @@ class AuthViewModel extends ChangeNotifier {
         fullName: fullName,
         phoneNumber: phoneNumber,
         farmLocation: farmLocation,
-        avatarUrl: avatarUrl,
+        avatarUrl: finalAvatarUrl,
       );
 
       _setLoading(false);

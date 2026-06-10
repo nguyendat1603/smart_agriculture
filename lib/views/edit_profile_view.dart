@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../theme/app_theme.dart';
 import '../viewmodels/auth_viewmodel.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 
 class EditProfileView extends StatefulWidget {
   const EditProfileView({super.key});
@@ -15,6 +17,8 @@ class _EditProfileViewState extends State<EditProfileView> {
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _locationController = TextEditingController();
   final TextEditingController _avatarUrlController = TextEditingController();
+  File? _selectedImage;
+  final ImagePicker _picker = ImagePicker();
 
   @override
   void initState() {
@@ -32,6 +36,15 @@ class _EditProfileViewState extends State<EditProfileView> {
     });
   }
 
+  Future<void> _pickImage() async {
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      setState(() {
+        _selectedImage = File(image.path);
+      });
+    }
+  }
+
   void _saveProfile() async {
     final authVM = context.read<AuthViewModel>();
     try {
@@ -39,7 +52,8 @@ class _EditProfileViewState extends State<EditProfileView> {
         _nameController.text.trim(),
         _phoneController.text.trim(),
         _locationController.text.trim(),
-        _avatarUrlController.text.trim(),
+        avatarFile: _selectedImage,
+        currentAvatarUrl: _avatarUrlController.text.trim(),
       );
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Lưu thông tin thành công')));
@@ -96,14 +110,19 @@ class _EditProfileViewState extends State<EditProfileView> {
                         blurRadius: 10,
                       )
                     ],
-                    image: _avatarUrlController.text.isNotEmpty
+                    image: _selectedImage != null
                         ? DecorationImage(
-                            image: NetworkImage(_avatarUrlController.text),
+                            image: FileImage(_selectedImage!),
                             fit: BoxFit.cover,
                           )
-                        : null,
+                        : _avatarUrlController.text.isNotEmpty
+                            ? DecorationImage(
+                                image: NetworkImage(_avatarUrlController.text),
+                                fit: BoxFit.cover,
+                              )
+                            : null,
                   ),
-                  child: _avatarUrlController.text.isNotEmpty 
+                  child: (_selectedImage != null || _avatarUrlController.text.isNotEmpty)
                       ? null 
                       : const Center(
                           child: Icon(Icons.person, size: 60, color: AppTheme.outline),
@@ -112,20 +131,23 @@ class _EditProfileViewState extends State<EditProfileView> {
                 Positioned(
                   bottom: 0,
                   right: 0,
-                  child: Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: AppTheme.primary,
-                      shape: BoxShape.circle,
-                      border: Border.all(color: Colors.white, width: 2),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.1),
-                          blurRadius: 4,
-                        )
-                      ],
+                  child: GestureDetector(
+                    onTap: _pickImage,
+                    child: Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: AppTheme.primary,
+                        shape: BoxShape.circle,
+                        border: Border.all(color: Colors.white, width: 2),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.1),
+                            blurRadius: 4,
+                          )
+                        ],
+                      ),
+                      child: const Icon(Icons.photo_camera, size: 20, color: Colors.white),
                     ),
-                    child: const Icon(Icons.photo_camera, size: 20, color: Colors.white),
                   ),
                 ),
               ],
@@ -148,10 +170,6 @@ class _EditProfileViewState extends State<EditProfileView> {
             _buildTextField(label: 'Số điện thoại', controller: _phoneController, keyboardType: TextInputType.phone, icon: Icons.phone),
             const SizedBox(height: 16),
             _buildTextField(label: 'Vị trí trang trại', controller: _locationController, icon: Icons.location_on),
-            const SizedBox(height: 16),
-            _buildTextField(label: 'Link ảnh Avatar (URL)', controller: _avatarUrlController, icon: Icons.link, onChanged: (val) {
-              setState(() {}); // Trigger rebuild to show new image in circle
-            }),
             const SizedBox(height: 16),
             // Email (Readonly)
             Column(
