@@ -49,7 +49,10 @@ void main() async {
         ChangeNotifierProvider(create: (_) => SensorViewModel()),
         ChangeNotifierProvider(create: (_) => AuthViewModel()),
         ChangeNotifierProvider(create: (_) => SettingsViewModel()),
-        ChangeNotifierProvider(create: (_) => AutomationViewModel()),
+        ChangeNotifierProxyProvider<SensorViewModel, AutomationViewModel>(
+          create: (_) => AutomationViewModel(),
+          update: (_, sensorVM, automationVM) => automationVM!..updateSensor(sensorVM),
+        ),
       ],
       child: const MyApp(),
     ),

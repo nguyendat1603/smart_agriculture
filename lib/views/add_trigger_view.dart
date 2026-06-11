@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../theme/app_theme.dart';
 import '../viewmodels/automation_viewmodel.dart';
 import '../viewmodels/settings_viewmodel.dart';
+import '../viewmodels/auth_viewmodel.dart';
 
 class AddTriggerView extends StatefulWidget {
   const AddTriggerView({super.key});
@@ -55,9 +56,9 @@ class _AddTriggerViewState extends State<AddTriggerView> {
           icon: const Icon(Icons.arrow_back, color: AppTheme.onSurfaceVariant),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text(
-          "Thêm kích hoạt mới",
-          style: TextStyle(color: AppTheme.onSurface, fontWeight: FontWeight.bold, fontSize: 20),
+        title: Text(
+          settingsVM.isEnglish ? "Add New Trigger" : "Thêm kích hoạt mới",
+          style: const TextStyle(color: AppTheme.onSurface, fontWeight: FontWeight.bold, fontSize: 20),
         ),
       ),
       body: SafeArea(
@@ -67,40 +68,40 @@ class _AddTriggerViewState extends State<AddTriggerView> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Loại thiết bị
-              const Text("Loại thiết bị", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: AppTheme.onSurface)),
+              Text(settingsVM.isEnglish ? "Device Type" : "Loại thiết bị", style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: AppTheme.onSurface)),
               const SizedBox(height: 4),
-              const Text("Chọn thiết bị bạn muốn điều khiển tự động.", style: TextStyle(fontSize: 14, color: AppTheme.onSurfaceVariant)),
+              Text(settingsVM.isEnglish ? "Select the device to automate." : "Chọn thiết bị bạn muốn điều khiển tự động.", style: const TextStyle(fontSize: 14, color: AppTheme.onSurfaceVariant)),
               const SizedBox(height: 16),
               Row(
                 children: [
-                  _buildDeviceOption(0, Icons.mode_fan_off, "Quạt gió"),
+                  _buildDeviceOption(0, Icons.mode_fan_off, settingsVM.isEnglish ? "Fan" : "Quạt gió"),
                   const SizedBox(width: 12),
-                  _buildDeviceOption(1, Icons.lightbulb_outline, "Đèn QH"),
+                  _buildDeviceOption(1, Icons.lightbulb_outline, settingsVM.isEnglish ? "Light" : "Đèn QH"),
                   const SizedBox(width: 12),
-                  _buildDeviceOption(2, Icons.water_drop_outlined, "Tưới tiêu"),
+                  _buildDeviceOption(2, Icons.water_drop_outlined, settingsVM.isEnglish ? "Pump" : "Tưới tiêu"),
                 ],
               ),
               const SizedBox(height: 24),
               
               // Điều kiện kích hoạt
               _buildSectionCard(
-                title: "Điều kiện kích hoạt",
+                title: settingsVM.isEnglish ? "Trigger Condition" : "Điều kiện kích hoạt",
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text("Cảm biến", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: AppTheme.onSurfaceVariant)),
+                    Text(settingsVM.isEnglish ? "Sensor" : "Cảm biến", style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: AppTheme.onSurfaceVariant)),
                     const SizedBox(height: 8),
                     _buildDropdown(
                       value: _selectedSensor,
-                      items: const [
-                        DropdownMenuItem(value: 'temp', child: Text("Nhiệt độ môi trường")),
-                        DropdownMenuItem(value: 'soil', child: Text("Độ ẩm đất")),
-                        DropdownMenuItem(value: 'light', child: Text("Cường độ ánh sáng")),
+                      items: [
+                        DropdownMenuItem(value: 'temp', child: Text(settingsVM.isEnglish ? "Environment Temp" : "Nhiệt độ môi trường")),
+                        DropdownMenuItem(value: 'soil', child: Text(settingsVM.isEnglish ? "Soil Moisture" : "Độ ẩm đất")),
+                        DropdownMenuItem(value: 'light', child: Text(settingsVM.isEnglish ? "Light Intensity" : "Cường độ ánh sáng")),
                       ],
                       onChanged: (val) => setState(() => _selectedSensor = val as String),
                     ),
                     const SizedBox(height: 16),
-                    const Text("Ngưỡng kích hoạt", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: AppTheme.onSurfaceVariant)),
+                    Text(settingsVM.isEnglish ? "Threshold" : "Ngưỡng kích hoạt", style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: AppTheme.onSurfaceVariant)),
                     const SizedBox(height: 8),
                     Row(
                       children: [
@@ -108,10 +109,10 @@ class _AddTriggerViewState extends State<AddTriggerView> {
                           flex: 1,
                           child: _buildDropdown(
                             value: _selectedOperator,
-                            items: const [
-                              DropdownMenuItem(value: 'gt', child: Text("> (Lớn hơn)")),
-                              DropdownMenuItem(value: 'lt', child: Text("< (Nhỏ hơn)")),
-                              DropdownMenuItem(value: 'eq', child: Text("= (Bằng)")),
+                            items: [
+                              DropdownMenuItem(value: 'gt', child: Text(settingsVM.isEnglish ? "> (Greater)" : "> (Lớn hơn)")),
+                              DropdownMenuItem(value: 'lt', child: Text(settingsVM.isEnglish ? "< (Less)" : "< (Nhỏ hơn)")),
+                              DropdownMenuItem(value: 'eq', child: Text(settingsVM.isEnglish ? "= (Equal)" : "= (Bằng)")),
                             ],
                             onChanged: (val) => setState(() => _selectedOperator = val as String),
                           ),
@@ -166,7 +167,9 @@ class _AddTriggerViewState extends State<AddTriggerView> {
                           const SizedBox(width: 8),
                           Expanded(
                             child: Text(
-                              "Kích hoạt khi ${_selectedSensor == 'temp' ? 'Nhiệt độ môi trường' : (_selectedSensor == 'soil' ? 'Độ ẩm đất' : 'Cường độ sáng')} ${_selectedOperator == 'gt' ? '>' : '<'} ${_thresholdValue.toInt()} ${_selectedSensor == 'temp' ? '°$tempUnit' : '%'}",
+                              settingsVM.isEnglish 
+                                ? "Trigger when ${_selectedSensor == 'temp' ? 'Temperature' : (_selectedSensor == 'soil' ? 'Soil Moisture' : 'Light')} ${_selectedOperator == 'gt' ? '>' : '<'} ${_thresholdValue.toInt()} ${_selectedSensor == 'temp' ? '°$tempUnit' : '%'}"
+                                : "Kích hoạt khi ${_selectedSensor == 'temp' ? 'Nhiệt độ môi trường' : (_selectedSensor == 'soil' ? 'Độ ẩm đất' : 'Cường độ sáng')} ${_selectedOperator == 'gt' ? '>' : '<'} ${_thresholdValue.toInt()} ${_selectedSensor == 'temp' ? '°$tempUnit' : '%'}",
                               style: const TextStyle(fontSize: 14, color: AppTheme.primary),
                             ),
                           ),
@@ -180,23 +183,23 @@ class _AddTriggerViewState extends State<AddTriggerView> {
               
               // Hành động
               _buildSectionCard(
-                title: "Hành động",
+                title: settingsVM.isEnglish ? "Action" : "Hành động",
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text("Lệnh thực thi", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: AppTheme.onSurfaceVariant)),
+                    Text(settingsVM.isEnglish ? "Execution Command" : "Lệnh thực thi", style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: AppTheme.onSurfaceVariant)),
                     const SizedBox(height: 8),
                     _buildDropdown(
                       value: _selectedAction,
-                      items: const [
-                        DropdownMenuItem(value: 'on_duration', child: Text("Bật trong thời gian định trước")),
-                        DropdownMenuItem(value: 'on', child: Text("Bật (Giữ nguyên)")),
-                        DropdownMenuItem(value: 'off', child: Text("Tắt")),
+                      items: [
+                        DropdownMenuItem(value: 'on_duration', child: Text(settingsVM.isEnglish ? "Turn on for duration" : "Bật trong thời gian định trước")),
+                        DropdownMenuItem(value: 'on', child: Text(settingsVM.isEnglish ? "Turn on (Hold)" : "Bật (Giữ nguyên)")),
+                        DropdownMenuItem(value: 'off', child: Text(settingsVM.isEnglish ? "Turn off" : "Tắt")),
                       ],
                       onChanged: (val) => setState(() => _selectedAction = val as String),
                     ),
                     const SizedBox(height: 16),
-                    const Text("Thời gian chạy (Phút)", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: AppTheme.onSurfaceVariant)),
+                    Text(settingsVM.isEnglish ? "Run Duration (Minutes)" : "Thời gian chạy (Phút)", style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: AppTheme.onSurfaceVariant)),
                     const SizedBox(height: 8),
                     Row(
                       children: [
@@ -250,10 +253,10 @@ class _AddTriggerViewState extends State<AddTriggerView> {
                   children: [
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
-                        Text("Giới hạn thời gian", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: AppTheme.onSurface)),
-                        SizedBox(height: 4),
-                        Text("Chỉ chạy ban ngày (06:00 - 18:00)", style: TextStyle(fontSize: 14, color: AppTheme.onSurfaceVariant)),
+                      children: [
+                        Text(settingsVM.isEnglish ? "Time Limit" : "Giới hạn thời gian", style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: AppTheme.onSurface)),
+                        const SizedBox(height: 4),
+                        Text(settingsVM.isEnglish ? "Daytime only (06:00 - 18:00)" : "Chỉ chạy ban ngày (06:00 - 18:00)", style: const TextStyle(fontSize: 14, color: AppTheme.onSurfaceVariant)),
                       ],
                     ),
                     Switch(
@@ -277,16 +280,20 @@ class _AddTriggerViewState extends State<AddTriggerView> {
         child: ElevatedButton.icon(
           onPressed: () {
             final vm = context.read<AutomationViewModel>();
-            String deviceName = _selectedDeviceType == 0 ? "Quạt gió" : (_selectedDeviceType == 1 ? "Đèn QH" : "Tưới tiêu");
+            String deviceName = _selectedDeviceType == 0 ? (settingsVM.isEnglish ? "Fan" : "Quạt gió") : (_selectedDeviceType == 1 ? (settingsVM.isEnglish ? "Light" : "Đèn QH") : (settingsVM.isEnglish ? "Pump" : "Tưới tiêu"));
             IconData icon = _selectedDeviceType == 0 ? Icons.mode_fan_off : (_selectedDeviceType == 1 ? Icons.lightbulb_outline : Icons.water_drop_outlined);
             
-            String sensorName = _selectedSensor == 'temp' ? "Nhiệt độ" : (_selectedSensor == 'soil' ? "Độ ẩm đất" : "Cường độ sáng");
+            String sensorName = _selectedSensor == 'temp' ? (settingsVM.isEnglish ? "Temperature" : "Nhiệt độ") : (_selectedSensor == 'soil' ? (settingsVM.isEnglish ? "Soil Moisture" : "Độ ẩm đất") : (settingsVM.isEnglish ? "Light" : "Cường độ sáng"));
             String opName = _selectedOperator == 'gt' ? ">" : (_selectedOperator == 'lt' ? "<" : "=");
-            String cond = "Kích hoạt khi $sensorName $opName ${_thresholdValue.toInt()}";
+            String cond = settingsVM.isEnglish ? "Trigger when $sensorName $opName ${_thresholdValue.toInt()}" : "Kích hoạt khi $sensorName $opName ${_thresholdValue.toInt()}";
             
-            String actionName = _selectedAction == 'on_duration' ? "Bật ($_durationMinutes phút)" : (_selectedAction == 'on' ? "Bật" : "Tắt");
+            String actionName = _selectedAction == 'on_duration' ? (settingsVM.isEnglish ? "Turn on ($_durationMinutes mins)" : "Bật ($_durationMinutes phút)") : (_selectedAction == 'on' ? (settingsVM.isEnglish ? "Turn on" : "Bật") : (settingsVM.isEnglish ? "Turn off" : "Tắt"));
+
+            final authVm = context.read<AuthViewModel>();
+            final userId = authVm.currentUser?.id ?? '';
 
             vm.addTrigger(AutomationTrigger(
+              userId: userId,
               title: deviceName,
               condition: cond,
               action: actionName,
@@ -296,7 +303,7 @@ class _AddTriggerViewState extends State<AddTriggerView> {
             Navigator.pop(context);
           },
           icon: const Icon(Icons.save),
-          label: const Text("Lưu kích hoạt", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+          label: Text(settingsVM.isEnglish ? "Save Trigger" : "Lưu kích hoạt", style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
           style: ElevatedButton.styleFrom(
             foregroundColor: AppTheme.onPrimary,
             backgroundColor: AppTheme.primary,

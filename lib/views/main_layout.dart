@@ -5,6 +5,10 @@ import 'dashboard_view.dart';
 import 'automation_view.dart';
 import 'sensors_view.dart';
 import 'settings_view.dart';
+import 'package:provider/provider.dart';
+import '../viewmodels/settings_viewmodel.dart';
+import '../viewmodels/automation_viewmodel.dart';
+import '../viewmodels/auth_viewmodel.dart';
 
 class MainLayout extends StatefulWidget {
   const MainLayout({super.key});
@@ -15,6 +19,18 @@ class MainLayout extends StatefulWidget {
 
 class _MainLayoutState extends State<MainLayout> {
   int _currentIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final authVm = context.read<AuthViewModel>();
+      final userId = authVm.currentUser?.id;
+      if (userId != null) {
+        context.read<AutomationViewModel>().fetchData(userId);
+      }
+    });
+  }
 
   final List<Widget> _views = [
     const DashboardView(),
@@ -62,10 +78,10 @@ class _MainLayoutState extends State<MainLayout> {
               selectedLabelStyle: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
               unselectedLabelStyle: const TextStyle(fontSize: 10),
               items: [
-                _buildNavItem(Icons.dashboard, "Dashboard", 0),
-                _buildNavItem(Icons.sensors, "Sensors", 1),
-                _buildNavItem(Icons.precision_manufacturing, "Automation", 2),
-                _buildNavItem(Icons.settings, "Settings", 3),
+                _buildNavItem(Icons.dashboard, context.watch<SettingsViewModel>().isEnglish ? "Dashboard" : "Tổng quan", 0),
+                _buildNavItem(Icons.sensors, context.watch<SettingsViewModel>().isEnglish ? "Sensors" : "Cảm biến", 1),
+                _buildNavItem(Icons.precision_manufacturing, context.watch<SettingsViewModel>().isEnglish ? "Automation" : "Tự động", 2),
+                _buildNavItem(Icons.settings, context.watch<SettingsViewModel>().isEnglish ? "Settings" : "Cài đặt", 3),
               ],
             ),
           ),

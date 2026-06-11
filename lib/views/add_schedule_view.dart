@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../theme/app_theme.dart';
 import '../viewmodels/automation_viewmodel.dart';
+import '../viewmodels/auth_viewmodel.dart';
+import '../viewmodels/settings_viewmodel.dart';
 
 class AddScheduleView extends StatefulWidget {
   const AddScheduleView({super.key});
@@ -17,6 +19,9 @@ class _AddScheduleViewState extends State<AddScheduleView> {
 
   @override
   Widget build(BuildContext context) {
+    final settingsVM = context.watch<SettingsViewModel>();
+    final isEn = settingsVM.isEnglish;
+
     return Scaffold(
       backgroundColor: AppTheme.surface,
       appBar: AppBar(
@@ -28,9 +33,9 @@ class _AddScheduleViewState extends State<AddScheduleView> {
           icon: const Icon(Icons.arrow_back, color: AppTheme.primary),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text(
-          "Thêm lịch trình mới",
-          style: TextStyle(color: AppTheme.primary, fontWeight: FontWeight.bold, fontSize: 20),
+        title: Text(
+          isEn ? "Add New Schedule" : "Thêm lịch trình mới",
+          style: const TextStyle(color: AppTheme.primary, fontWeight: FontWeight.bold, fontSize: 20),
         ),
       ),
       body: SafeArea(
@@ -67,9 +72,9 @@ class _AddScheduleViewState extends State<AddScheduleView> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
-                      Text("Cấu hình tự động", style: TextStyle(color: Colors.white70, fontSize: 12, fontWeight: FontWeight.w600, letterSpacing: 1.2)),
-                      Text("Tối ưu hóa nguồn nước", style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold)),
+                    children: [
+                      Text(isEn ? "Automated Config" : "Cấu hình tự động", style: const TextStyle(color: Colors.white70, fontSize: 12, fontWeight: FontWeight.w600, letterSpacing: 1.2)),
+                      Text(isEn ? "Water Optimization" : "Tối ưu hóa nguồn nước", style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold)),
                     ],
                   ),
                 ),
@@ -103,9 +108,9 @@ class _AddScheduleViewState extends State<AddScheduleView> {
                         const SizedBox(width: 16),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const [
-                            Text("Kích hoạt lịch trình", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: AppTheme.onSurfaceVariant)),
-                            Text("Chế độ tự động hiện tại", style: TextStyle(fontSize: 14, color: Colors.grey)),
+                          children: [
+                            Text(isEn ? "Enable Schedule" : "Kích hoạt lịch trình", style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: AppTheme.onSurfaceVariant)),
+                            Text(isEn ? "Current automation mode" : "Chế độ tự động hiện tại", style: const TextStyle(fontSize: 14, color: Colors.grey)),
                           ],
                         ),
                       ],
@@ -134,7 +139,7 @@ class _AddScheduleViewState extends State<AddScheduleView> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text("GIỜ BẮT ĐẦU", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: AppTheme.onSurfaceVariant, letterSpacing: 1.2)),
+                    Text(isEn ? "START TIME" : "GIỜ BẮT ĐẦU", style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: AppTheme.onSurfaceVariant, letterSpacing: 1.2)),
                     const SizedBox(height: 12),
                     GestureDetector(
                       onTap: () async {
@@ -156,7 +161,7 @@ class _AddScheduleViewState extends State<AddScheduleView> {
                       ),
                     ),
                     const SizedBox(height: 8),
-                    const Text("Hệ thống sẽ tự động kích hoạt vào khung giờ này.", style: TextStyle(fontSize: 14, color: AppTheme.onSurfaceVariant)),
+                    Text(isEn ? "The system will auto-trigger at this time." : "Hệ thống sẽ tự động kích hoạt vào khung giờ này.", style: const TextStyle(fontSize: 14, color: AppTheme.onSurfaceVariant)),
                   ],
                 ),
               ),
@@ -176,12 +181,14 @@ class _AddScheduleViewState extends State<AddScheduleView> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text("NGÀY LẶP LẠI", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: AppTheme.onSurfaceVariant, letterSpacing: 1.2)),
+                    Text(isEn ? "REPEAT DAYS" : "NGÀY LẶP LẠI", style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: AppTheme.onSurfaceVariant, letterSpacing: 1.2)),
                     const SizedBox(height: 16),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: List.generate(7, (index) {
-                        final days = ["T2", "T3", "T4", "T5", "T6", "T7", "CN"];
+                        final daysEn = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+                        final daysVn = ["T2", "T3", "T4", "T5", "T6", "T7", "CN"];
+                        final days = isEn ? daysEn : daysVn;
                         final isSelected = _selectedDays[index];
                         return GestureDetector(
                           onTap: () {
@@ -225,15 +232,21 @@ class _AddScheduleViewState extends State<AddScheduleView> {
         child: ElevatedButton.icon(
           onPressed: () {
             final vm = context.read<AutomationViewModel>();
-            final daysLabels = ["T2", "T3", "T4", "T5", "T6", "T7", "CN"];
+            final daysEn = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+            final daysVn = ["T2", "T3", "T4", "T5", "T6", "T7", "CN"];
+            final daysLabels = isEn ? daysEn : daysVn;
             List<String> selected = [];
             for (int i = 0; i < 7; i++) {
               if (_selectedDays[i]) selected.add(daysLabels[i]);
             }
-            String daysStr = selected.isEmpty ? "Không lặp" : selected.join(", ");
+            String daysStr = selected.isEmpty ? (isEn ? "No Repeat" : "Không lặp") : selected.join(", ");
+            
+            final authVm = context.read<AuthViewModel>();
+            final userId = authVm.currentUser?.id ?? '';
             
             vm.addSchedule(AutomationSchedule(
-              title: "Lịch trình tùy chỉnh",
+              userId: userId,
+              title: isEn ? "Custom Schedule" : "Lịch trình tùy chỉnh",
               time: _startTime.format(context),
               days: daysStr,
               isEnabled: _isScheduleEnabled,
@@ -241,7 +254,7 @@ class _AddScheduleViewState extends State<AddScheduleView> {
             Navigator.pop(context);
           },
           icon: const Icon(Icons.check),
-          label: const Text("Lưu lịch trình", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+          label: Text(isEn ? "Save Schedule" : "Lưu lịch trình", style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
           style: ElevatedButton.styleFrom(
             foregroundColor: AppTheme.onPrimary,
             backgroundColor: AppTheme.primary,
