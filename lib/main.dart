@@ -4,6 +4,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'viewmodels/sensor_viewmodel.dart';
 import 'viewmodels/auth_viewmodel.dart';
+import 'viewmodels/settings_viewmodel.dart';
+import 'viewmodels/automation_viewmodel.dart';
 import 'services/supabase_service.dart';
 import 'views/login_view.dart';
 import 'views/register_view.dart';
@@ -13,6 +15,8 @@ import 'views/change_password_view.dart';
 import 'views/otp_view.dart';
 import 'views/reset_password_view.dart';
 import 'views/main_layout.dart';
+import 'views/add_trigger_view.dart';
+import 'views/add_schedule_view.dart';
 import 'theme/app_theme.dart';
 
 void main() async {
@@ -44,6 +48,8 @@ void main() async {
       providers: [
         ChangeNotifierProvider(create: (_) => SensorViewModel()),
         ChangeNotifierProvider(create: (_) => AuthViewModel()),
+        ChangeNotifierProvider(create: (_) => SettingsViewModel()),
+        ChangeNotifierProvider(create: (_) => AutomationViewModel()),
       ],
       child: const MyApp(),
     ),
@@ -69,6 +75,8 @@ class MyApp extends StatelessWidget {
         '/change_password': (context) => const ChangePasswordView(),
         '/otp': (context) => const OtpView(),
         '/reset_password': (context) => const ResetPasswordView(),
+        '/add_trigger': (context) => const AddTriggerView(),
+        '/add_schedule': (context) => const AddScheduleView(),
       },
     );
   }

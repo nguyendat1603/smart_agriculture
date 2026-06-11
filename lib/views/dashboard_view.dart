@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:provider/provider.dart';
 import '../viewmodels/sensor_viewmodel.dart';
+import '../viewmodels/settings_viewmodel.dart';
 import '../theme/app_theme.dart';
 
 class DashboardView extends StatelessWidget {
@@ -142,6 +143,7 @@ class DashboardView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final vm = Provider.of<SensorViewModel>(context);
+    final settingsVM = Provider.of<SettingsViewModel>(context);
 
     List<FlSpot> tempSpots = [];
     List<FlSpot> airHumidSpots = [];
@@ -161,9 +163,39 @@ class DashboardView extends StatelessWidget {
     return ListView(
       padding: const EdgeInsets.all(16),
       children: [
-        const Text("Live Sensor Data", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: AppTheme.onSurface)),
-        const SizedBox(height: 4),
-        const Text("Real-time monitoring across all field zones.", style: TextStyle(fontSize: 14, color: AppTheme.onSurfaceVariant)),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: const [
+                Text("Live Sensor Data", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: AppTheme.onSurface)),
+                SizedBox(height: 4),
+                Text("Real-time monitoring across all field zones.", style: TextStyle(fontSize: 14, color: AppTheme.onSurfaceVariant)),
+              ],
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              decoration: BoxDecoration(
+                color: AppTheme.surfaceContainerHighest,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: DropdownButtonHideUnderline(
+                child: DropdownButton<String>(
+                  value: settingsVM.tempUnit,
+                  items: const [
+                    DropdownMenuItem(value: 'C', child: Text('°C')),
+                    DropdownMenuItem(value: 'F', child: Text('°F')),
+                    DropdownMenuItem(value: 'K', child: Text('°K')),
+                  ],
+                  onChanged: (val) {
+                    if (val != null) settingsVM.setTempUnit(val);
+                  },
+                ),
+              ),
+            ),
+          ],
+        ),
         const SizedBox(height: 24),
         
         _buildSensorCard(
@@ -187,8 +219,8 @@ class DashboardView extends StatelessWidget {
           subtitle: "Tối ưu: 22-26°C",
           statusText: vm.nhietDo > 26 ? "Elevated" : (vm.nhietDo < 22 ? "Cold" : "Optimal"),
           statusColor: vm.nhietDo > 26 ? AppTheme.error : AppTheme.tertiary,
-          value: vm.nhietDo.toStringAsFixed(1),
-          unit: "°C",
+          value: settingsVM.formatTemperature(vm.nhietDo).replaceAll(RegExp(r'°[CFK]'), ''),
+          unit: "°${settingsVM.tempUnit}",
           trendStr: "Dynamic Realtime",
           trendIcon: Icons.show_chart,
           chartSpots: tempSpots,

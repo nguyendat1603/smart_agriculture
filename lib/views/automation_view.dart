@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../theme/app_theme.dart';
+import '../viewmodels/automation_viewmodel.dart';
 
 class AutomationView extends StatefulWidget {
   const AutomationView({super.key});
@@ -9,13 +11,12 @@ class AutomationView extends StatefulWidget {
 }
 
 class _AutomationViewState extends State<AutomationView> {
-  bool isMorningWateringOn = true;
-  bool isEveningWateringOn = false;
-  bool isSoilMoistureTriggerOn = true;
-  bool isCoolingTriggerOn = true;
+  int _selectedTab = 0; // 0: Lịch trình, 1: Kích hoạt
 
   @override
   Widget build(BuildContext context) {
+    final vm = context.watch<AutomationViewModel>();
+
     return Scaffold(
       backgroundColor: AppTheme.background,
       appBar: AppBar(
@@ -31,12 +32,22 @@ class _AutomationViewState extends State<AutomationView> {
           "Cài đặt Tự động",
           style: TextStyle(color: AppTheme.primary, fontWeight: FontWeight.bold),
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.add, color: AppTheme.onSurfaceVariant),
-            onPressed: () {},
-          ),
-        ],
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          if (_selectedTab == 0) {
+            Navigator.pushNamed(context, '/add_schedule');
+          } else {
+            Navigator.pushNamed(context, '/add_trigger');
+          }
+        },
+        backgroundColor: AppTheme.primary,
+        foregroundColor: AppTheme.onPrimary,
+        icon: const Icon(Icons.add),
+        label: Text(
+          _selectedTab == 0 ? "Thêm lịch trình mới" : "Thêm kích hoạt mới",
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -44,7 +55,7 @@ class _AutomationViewState extends State<AutomationView> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Tabs Mock
+              // Tabs
               Container(
                 padding: const EdgeInsets.all(4),
                 decoration: BoxDecoration(
@@ -54,24 +65,37 @@ class _AutomationViewState extends State<AutomationView> {
                 child: Row(
                   children: [
                     Expanded(
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(vertical: 8),
-                        decoration: BoxDecoration(
-                          color: AppTheme.surface,
-                          borderRadius: BorderRadius.circular(8),
-                          boxShadow: [
-                            BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 4, offset: const Offset(0, 2))
-                          ]
+                      child: GestureDetector(
+                        onTap: () => setState(() => _selectedTab = 0),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 8),
+                          decoration: BoxDecoration(
+                            color: _selectedTab == 0 ? AppTheme.surface : Colors.transparent,
+                            borderRadius: BorderRadius.circular(8),
+                            boxShadow: _selectedTab == 0 ? [
+                              BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 4, offset: const Offset(0, 2))
+                            ] : null,
+                          ),
+                          alignment: Alignment.center,
+                          child: Text("Lịch trình", style: TextStyle(color: _selectedTab == 0 ? AppTheme.primary : AppTheme.onSurfaceVariant, fontWeight: FontWeight.bold, fontSize: 12)),
                         ),
-                        alignment: Alignment.center,
-                        child: const Text("Lịch trình", style: TextStyle(color: AppTheme.primary, fontWeight: FontWeight.bold, fontSize: 12)),
                       ),
                     ),
                     Expanded(
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(vertical: 8),
-                        alignment: Alignment.center,
-                        child: const Text("Kích hoạt", style: TextStyle(color: AppTheme.onSurfaceVariant, fontWeight: FontWeight.bold, fontSize: 12)),
+                      child: GestureDetector(
+                        onTap: () => setState(() => _selectedTab = 1),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 8),
+                          decoration: BoxDecoration(
+                            color: _selectedTab == 1 ? AppTheme.surface : Colors.transparent,
+                            borderRadius: BorderRadius.circular(8),
+                            boxShadow: _selectedTab == 1 ? [
+                              BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 4, offset: const Offset(0, 2))
+                            ] : null,
+                          ),
+                          alignment: Alignment.center,
+                          child: Text("Kích hoạt", style: TextStyle(color: _selectedTab == 1 ? AppTheme.primary : AppTheme.onSurfaceVariant, fontWeight: FontWeight.bold, fontSize: 12)),
+                        ),
                       ),
                     ),
                   ],
@@ -80,67 +104,55 @@ class _AutomationViewState extends State<AutomationView> {
 
               const SizedBox(height: 24),
 
-              // Schedules Section
-              const Text("Lịch trình đang hoạt động", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: AppTheme.onSurface)),
-              const SizedBox(height: 16),
-              
-              _buildAutomationCard(
-                icon: Icons.water_drop,
-                iconColor: AppTheme.primary,
-                iconBgColor: AppTheme.secondaryContainer.withValues(alpha: 0.3),
-                title: "Tưới nước buổi sáng",
-                subtitle: "06:00 AM • T2, T4, T6",
-                isOn: isMorningWateringOn,
-                onToggle: (val) { setState(() { isMorningWateringOn = val; }); },
-                actionLabel: "Thời lượng",
-                actionValue: "15 phút",
-              ),
+              if (_selectedTab == 0) ...[
+                // Schedules Section
+                const Text("Lịch trình đang hoạt động", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: AppTheme.onSurface)),
+                const SizedBox(height: 16),
+                
+                ...vm.schedules.asMap().entries.map((entry) {
+                  int idx = entry.key;
+                  var schedule = entry.value;
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 16),
+                    child: _buildAutomationCard(
+                      icon: Icons.schedule,
+                      iconColor: AppTheme.primary,
+                      iconBgColor: AppTheme.primaryContainer.withValues(alpha: 0.2),
+                      title: schedule.title,
+                      subtitle: schedule.days,
+                      isOn: schedule.isEnabled,
+                      onToggle: (val) { vm.toggleSchedule(idx); },
+                      actionLabel: "Giờ kích hoạt",
+                      actionValue: schedule.time,
+                    ),
+                  );
+                }),
+              ],
 
-              const SizedBox(height: 16),
+              if (_selectedTab == 1) ...[
+                // Triggers Section
+                const Text("Kích hoạt theo Cảm biến", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: AppTheme.onSurface)),
+                const SizedBox(height: 16),
 
-              _buildAutomationCard(
-                icon: Icons.nightlight,
-                iconColor: AppTheme.onSurfaceVariant,
-                iconBgColor: AppTheme.surfaceVariant.withValues(alpha: 0.5),
-                title: "Tưới nước buổi tối",
-                subtitle: "18:30 PM • Hàng ngày",
-                isOn: isEveningWateringOn,
-                onToggle: (val) { setState(() { isEveningWateringOn = val; }); },
-                actionLabel: "Thời lượng",
-                actionValue: "10 phút",
-              ),
-
-              const SizedBox(height: 32),
-
-              // Triggers Section
-              const Text("Kích hoạt theo Cảm biến", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: AppTheme.onSurface)),
-              const SizedBox(height: 16),
-
-              _buildAutomationCard(
-                icon: Icons.water,
-                iconColor: AppTheme.primary,
-                iconBgColor: AppTheme.secondaryContainer.withValues(alpha: 0.3),
-                title: "Độ ẩm đất",
-                subtitle: "Tưới khi < 45%",
-                isOn: isSoilMoistureTriggerOn,
-                onToggle: (val) { setState(() { isSoilMoistureTriggerOn = val; }); },
-                actionLabel: "Hành động",
-                actionValue: "Bật Bơm A (5 phút)",
-              ),
-
-              const SizedBox(height: 16),
-
-              _buildAutomationCard(
-                icon: Icons.device_thermostat,
-                iconColor: AppTheme.primary,
-                iconBgColor: AppTheme.secondaryContainer.withValues(alpha: 0.3),
-                title: "Làm mát nhà kính",
-                subtitle: "Kích hoạt khi > 32°C",
-                isOn: isCoolingTriggerOn,
-                onToggle: (val) { setState(() { isCoolingTriggerOn = val; }); },
-                actionLabel: "Hành động",
-                actionValue: "Mở quạt thông gió",
-              ),
+                ...vm.triggers.asMap().entries.map((entry) {
+                  int idx = entry.key;
+                  var trigger = entry.value;
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 16),
+                    child: _buildAutomationCard(
+                      icon: trigger.icon,
+                      iconColor: AppTheme.primary,
+                      iconBgColor: AppTheme.secondaryContainer.withValues(alpha: 0.3),
+                      title: trigger.title,
+                      subtitle: trigger.condition,
+                      isOn: trigger.isEnabled,
+                      onToggle: (val) { vm.toggleTrigger(idx); },
+                      actionLabel: "Hành động",
+                      actionValue: trigger.action,
+                    ),
+                  );
+                }),
+              ],
 
               const SizedBox(height: 80), // Padding for bottom nav
             ],

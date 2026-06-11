@@ -14,6 +14,10 @@ class SensorViewModel extends ChangeNotifier {
   bool _isPumpOn = false;
   bool get isPumpOn => _isPumpOn;
 
+  int _pumpCountdownRemaining = 0;
+  int get pumpCountdownRemaining => _pumpCountdownRemaining;
+  Timer? _pumpAutomationTimer;
+
   bool isRaining = false;
   Timer? _rainTimer;
 
@@ -60,6 +64,12 @@ class SensorViewModel extends ChangeNotifier {
               _isPumpOn =
                   data['TrangThaiBom'] ==
                   true; // Nếu Firebase trả về true thì gán true
+                  
+              if (!_isPumpOn && _pumpAutomationTimer != null) {
+                _pumpAutomationTimer?.cancel();
+                _pumpAutomationTimer = null;
+                _pumpCountdownRemaining = 0;
+              }
 
               _handleRainLogic();
               
@@ -131,9 +141,39 @@ class SensorViewModel extends ChangeNotifier {
 
       // Ghi đè trạng thái mới lên Firebase
       await _dbRef.child("NongNghiep").update({"TrangThaiBom": newState});
+      
+      if (!newState) {
+        _pumpAutomationTimer?.cancel();
+        _pumpAutomationTimer = null;
+        _pumpCountdownRemaining = 0;
+        // Giao diện sẽ tự cập nhật do stream listener Firebase thay đổi
+      }
 
       // Lưu ý: Không cần gọi notifyListeners() ở đây vì hàm _listenToRealtimeData()
       // sẽ tự động phát hiện Firebase vừa bị thay đổi và cập nhật lại giao diện.
+    }
+  }
+
+  Future<void> startPumpWithTimer(int minutes) async {
+    if (canTurnOnPump() || _isPumpOn) {
+      if (!_isPumpOn) {
+        await togglePump(); // Bật máy bơm
+      }
+      _pumpCountdownRemaining = minutes * 60;
+      _pumpAutomationTimer?.cancel();
+      _pumpAutomationTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+        if (_pumpCountdownRemaining > 0) {
+          _pumpCountdownRemaining--;
+          notifyListeners();
+        } else {
+          _pumpAutomationTimer?.cancel();
+          _pumpAutomationTimer = null;
+          if (_isPumpOn) {
+            togglePump(); // Tắt máy bơm khi hết thời gian
+          }
+        }
+      });
+      notifyListeners();
     }
   }
 }

@@ -26,7 +26,6 @@ class _MainLayoutState extends State<MainLayout> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBody: true, // For bottom nav bar transparency
       body: IndexedStack(
         index: _currentIndex,
         children: _views,

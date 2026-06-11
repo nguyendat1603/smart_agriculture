@@ -1,0 +1,1540 @@
+<!-- Thêm kích hoạt mới -->
+<!DOCTYPE html><html lang="vi"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Thêm kích hoạt mới</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container": "#eceef1",
+                        "secondary-fixed-dim": "#78dc77",
+                        "surface-dim": "#d8dadd",
+                        "surface-variant": "#e0e3e6",
+                        "secondary-container": "#91f78e",
+                        "on-secondary-fixed": "#002204",
+                        "on-secondary-container": "#00731e",
+                        "on-tertiary-fixed": "#002107",
+                        "primary": "#0d631b",
+                        "surface-bright": "#f7f9fc",
+                        "primary-fixed": "#a3f69c",
+                        "background": "#f7f9fc",
+                        "surface-container-high": "#e6e8eb",
+                        "tertiary": "#1d622b",
+                        "on-tertiary": "#ffffff",
+                        "surface": "#f7f9fc",
+                        "on-background": "#191c1e",
+                        "on-primary-fixed-variant": "#005312",
+                        "on-error": "#ffffff",
+                        "tertiary-container": "#387b41",
+                        "primary-container": "#2e7d32",
+                        "on-error-container": "#93000a",
+                        "primary-fixed-dim": "#88d982",
+                        "on-primary-fixed": "#002204",
+                        "surface-container-lowest": "#ffffff",
+                        "error": "#ba1a1a",
+                        "on-secondary": "#ffffff",
+                        "secondary": "#006e1c",
+                        "outline-variant": "#bfcaba",
+                        "inverse-surface": "#2d3133",
+                        "inverse-primary": "#88d982",
+                        "outline": "#707a6c",
+                        "on-primary": "#ffffff",
+                        "tertiary-fixed": "#abf4ac",
+                        "secondary-fixed": "#94f990",
+                        "error-container": "#ffdad6",
+                        "tertiary-fixed-dim": "#90d792",
+                        "on-tertiary-fixed-variant": "#07521d",
+                        "on-surface": "#191c1e",
+                        "surface-container-low": "#f2f4f7",
+                        "on-surface-variant": "#40493d",
+                        "on-primary-container": "#cbffc2",
+                        "surface-tint": "#1b6d24",
+                        "on-tertiary-container": "#c7ffc5",
+                        "on-secondary-fixed-variant": "#005313",
+                        "surface-container-highest": "#e0e3e6",
+                        "inverse-on-surface": "#eff1f4"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xl": "32px",
+                        "md": "16px",
+                        "container-margin": "20px",
+                        "lg": "24px",
+                        "xs": "8px",
+                        "sm": "12px",
+                        "gutter": "16px",
+                        "base": "4px"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Inter"],
+                        "data-viz": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "title-md": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "headline-lg-mobile": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "data-viz": ["11px", { "lineHeight": "14px", "fontWeight": "600" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "title-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "display-lg": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-lg": ["28px", { "lineHeight": "34px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "30px", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.filled {
+            font-variation-settings: 'FILL' 1;
+        }
+        
+        /* Custom range slider styling */
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 20px;
+            width: 20px;
+            border-radius: 50%;
+            background: #ffffff;
+            border: 2px solid #0d631b;
+            cursor: pointer;
+            margin-top: -8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 4px;
+            cursor: pointer;
+            background: #e0e3e6;
+            border-radius: 2px;
+        }
+        input[type=range]:focus::-webkit-slider-runnable-track {
+            background: #bfcaba;
+        }
+        
+        /* Glassmorphism utility */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-lg min-h-screen pb-24 selection:bg-primary-container selection:text-on-primary-container">
+<!-- Top Navigation App Bar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-container-margin py-sm bg-surface/70 dark:bg-surface-dim/70 backdrop-blur-xl shadow-sm border-b border-surface-variant transition-all duration-300">
+<button aria-label="Go back" class="p-2 rounded-full hover:bg-surface-container-highest transition-colors active:scale-95 duration-200 text-on-surface">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h1 class="font-title-md text-title-md text-on-surface truncate px-4">Thêm kích hoạt mới</h1>
+<div class="w-10"></div> <!-- Placeholder for balance -->
+</header>
+<!-- Main Content Canvas -->
+<main class="pt-[72px] px-container-margin space-y-lg max-w-md mx-auto">
+<!-- Section: Loại thiết bị (Device Type) -->
+<section class="space-y-sm">
+<h2 class="font-title-md text-title-md text-on-surface">Loại thiết bị</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Chọn thiết bị bạn muốn điều khiển tự động.</p>
+<div class="grid grid-cols-3 gap-sm"><!-- Option 1: Quạt gió -->
+<button class="flex flex-col items-center justify-center p-md bg-surface-container-lowest rounded-xl border-2 border-primary shadow-sm active:scale-95 transition-all focus:outline-none focus:ring-2 focus:ring-primary-fixed">
+<div class="w-12 h-12 rounded-full bg-primary-container flex items-center justify-center mb-xs text-on-primary-container">
+<span class="material-symbols-outlined filled">mode_fan</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface text-center">Quạt gió</span>
+</button>
+<!-- Option 2: Đèn quang hợp -->
+<button class="flex flex-col items-center justify-center p-md bg-surface-container-lowest rounded-xl border border-surface-variant shadow-sm hover:border-outline-variant active:scale-95 transition-all focus:outline-none focus:ring-2 focus:ring-primary-fixed">
+<div class="w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center mb-xs text-on-surface-variant">
+<span class="material-symbols-outlined">lightbulb</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface-variant text-center">Đèn QH</span>
+</button>
+<!-- Option 3: Hệ thống tưới -->
+<button class="flex flex-col items-center justify-center p-md bg-surface-container-lowest rounded-xl border border-surface-variant shadow-sm hover:border-outline-variant active:scale-95 transition-all focus:outline-none focus:ring-2 focus:ring-primary-fixed">
+<div class="w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center mb-xs text-on-surface-variant">
+<span class="material-symbols-outlined">water_drop</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface-variant text-center">Tưới tiêu</span>
+</button></div>
+</section>
+<!-- Section: Điều kiện kích hoạt (Trigger Condition) -->
+<section class="bg-surface-container-lowest rounded-xl p-md shadow-sm border border-surface-variant space-y-md">
+<h2 class="font-title-md text-title-md text-on-surface border-b border-surface-variant pb-xs">Điều kiện kích hoạt</h2>
+<div class="space-y-sm">
+<label class="block font-label-md text-label-md text-on-surface-variant" for="sensor-select">Cảm biến</label>
+<div class="relative">
+<select class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg py-sm px-md text-on-surface focus:ring-2 focus:ring-primary focus:border-primary appearance-none" id="sensor-select"><option selected="" value="temp">Nhiệt độ môi trường</option>
+<option value="soil">Độ ẩm đất</option>
+<option value="light">Cường độ ánh sáng</option></select>
+<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-on-surface-variant">
+<span class="material-symbols-outlined">expand_more</span>
+</div>
+</div>
+</div>
+<div class="space-y-sm">
+<label class="block font-label-md text-label-md text-on-surface-variant">Ngưỡng kích hoạt</label>
+<div class="flex items-center space-x-sm">
+<select class="bg-surface-container-lowest border border-outline-variant rounded-lg py-sm px-sm text-on-surface focus:ring-2 focus:ring-primary focus:border-primary">
+<option value="gt">&gt; (Lớn hơn)</option>
+<option value="lt">&lt; (Nhỏ hơn)</option>
+<option value="eq">= (Bằng)</option>
+</select>
+<div class="relative flex-1">
+<input class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg py-sm pl-md pr-xl text-on-surface focus:ring-2 focus:ring-primary focus:border-primary text-right font-title-md" type="number" value="30">
+<span class="absolute inset-y-0 right-0 flex items-center pr-3 text-on-surface-variant font-label-md">°C</span>
+</div>
+</div>
+<div class="pt-sm pb-xs">
+<input class="w-full h-1 bg-surface-variant rounded-lg appearance-none cursor-pointer" max="50" min="0" type="range" value="30">
+<div class="flex justify-between text-on-surface-variant mt-1">
+<span class="font-data-viz text-data-viz">0°C</span>
+<span class="font-data-viz text-data-viz">50°C</span>
+</div>
+</div>
+<p class="font-body-sm text-body-sm text-primary bg-primary-container/10 p-sm rounded-lg flex items-center">
+<span class="material-symbols-outlined mr-2 text-primary" style="font-size: 18px;">info</span>
+                    Kích hoạt khi Nhiệt độ môi trường &gt; 30°C
+                </p>
+</div>
+</section>
+<!-- Section: Hành động (Action) -->
+<section class="bg-surface-container-lowest rounded-xl p-md shadow-sm border border-surface-variant space-y-md">
+<h2 class="font-title-md text-title-md text-on-surface border-b border-surface-variant pb-xs">Hành động</h2>
+<div class="space-y-sm">
+<label class="block font-label-md text-label-md text-on-surface-variant" for="action-select">Lệnh thực thi</label>
+<div class="relative">
+<select class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg py-sm px-md text-on-surface focus:ring-2 focus:ring-primary focus:border-primary appearance-none" id="action-select">
+<option selected="" value="on_duration">Bật trong thời gian định trước</option>
+<option value="on">Bật (Giữ nguyên)</option>
+<option value="off">Tắt</option>
+</select>
+<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-on-surface-variant">
+<span class="material-symbols-outlined">expand_more</span>
+</div>
+</div>
+</div>
+<div class="space-y-sm">
+<label class="block font-label-md text-label-md text-on-surface-variant">Thời gian chạy (Phút)</label>
+<div class="flex items-center space-x-md">
+<button class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined">remove</span>
+</button>
+<input class="flex-1 bg-surface-container-lowest border border-outline-variant rounded-lg py-sm px-md text-center text-on-surface focus:ring-2 focus:ring-primary focus:border-primary font-title-md" type="number" value="10">
+<button class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined">add</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Section: Thời gian hoạt động (Active Time) -->
+<section class="bg-surface-container-lowest rounded-xl p-md shadow-sm border border-surface-variant flex items-center justify-between">
+<div class="space-y-1">
+<h3 class="font-title-md text-title-md text-on-surface">Giới hạn thời gian</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Chỉ chạy ban ngày (06:00 - 18:00)</p>
+</div>
+<!-- Custom Switch -->
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox" value="">
+<div class="w-11 h-6 bg-surface-variant rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary shadow-inner"></div>
+</label>
+</section>
+</main>
+<!-- Floating Action Bar (Bottom Action) -->
+<div class="fixed bottom-0 left-0 w-full p-container-margin glass-panel border-t border-surface-variant z-40 pb-safe">
+<button class="w-full bg-gradient-to-r from-primary to-tertiary-container hover:from-primary-container hover:to-tertiary text-on-primary font-title-md text-title-md py-sm px-xl rounded-full shadow-lg active:scale-95 transition-all flex items-center justify-center">
+<span class="material-symbols-outlined mr-2">save</span>
+            Lưu kích hoạt
+        </button>
+</div>
+
+
+</body></html>
+
+<!-- Automation Triggers (With Add Button) -->
+<!DOCTYPE html><html lang="vi"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Cài đặt Tự động - AgriPulse</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-variant": "#e0e3e6",
+                        "primary-fixed-dim": "#88d982",
+                        "on-tertiary-container": "#c7ffc5",
+                        "on-secondary-fixed": "#002204",
+                        "on-background": "#191c1e",
+                        "on-surface-variant": "#40493d",
+                        "on-primary-container": "#cbffc2",
+                        "surface-container-low": "#f2f4f7",
+                        "secondary-fixed": "#94f990",
+                        "error-container": "#ffdad6",
+                        "secondary-fixed-dim": "#78dc77",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary-fixed-variant": "#005312",
+                        "tertiary-container": "#387b41",
+                        "surface-tint": "#1b6d24",
+                        "outline": "#707a6c",
+                        "on-surface": "#191c1e",
+                        "on-error-container": "#93000a",
+                        "on-secondary-fixed-variant": "#005313",
+                        "on-secondary-container": "#00731e",
+                        "on-primary-fixed": "#002204",
+                        "tertiary-fixed-dim": "#90d792",
+                        "surface-dim": "#d8dadd",
+                        "on-error": "#ffffff",
+                        "background": "#f7f9fc",
+                        "primary": "#0d631b",
+                        "on-tertiary-fixed-variant": "#07521d",
+                        "tertiary": "#1d622b",
+                        "on-secondary": "#ffffff",
+                        "inverse-primary": "#88d982",
+                        "error": "#ba1a1a",
+                        "inverse-on-surface": "#eff1f4",
+                        "surface-bright": "#f7f9fc",
+                        "outline-variant": "#bfcaba",
+                        "on-tertiary-fixed": "#002107",
+                        "tertiary-fixed": "#abf4ac",
+                        "primary-fixed": "#a3f69c",
+                        "surface-container-high": "#e6e8eb",
+                        "on-tertiary": "#ffffff",
+                        "surface-container": "#eceef1",
+                        "surface": "#f7f9fc",
+                        "on-primary": "#ffffff",
+                        "surface-container-highest": "#e0e3e6",
+                        "primary-container": "#2e7d32",
+                        "secondary-container": "#91f78e",
+                        "inverse-surface": "#2d3133",
+                        "secondary": "#006e1c"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "base": "4px",
+                        "md": "16px",
+                        "gutter": "16px",
+                        "xs": "8px",
+                        "xl": "32px",
+                        "sm": "12px",
+                        "container-margin": "20px",
+                        "lg": "24px"
+                    },
+                    "fontFamily": {
+                        "title-md": ["Inter"],
+                        "data-viz": ["Inter"],
+                        "label-md": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "display-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "title-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "data-viz": ["11px", {"lineHeight": "14px", "fontWeight": "600"}],
+                        "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "headline-lg": ["28px", {"lineHeight": "34px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "headline-lg-mobile": ["24px", {"lineHeight": "30px", "fontWeight": "600"}],
+                        "display-lg": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+        .toggle-checkbox:checked {
+            background-color: #0d631b;
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            transform: translateX(100%);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-background font-body-lg antialiased pb-24">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-surface/70 dark:bg-surface-dim/70 backdrop-blur-xl bg-surface/70 dark:bg-surface-dim/70 backdrop-blur-md border-b border-outline-variant/30 shadow-sm flex justify-between items-center h-16 px-gutter max-w-full">
+<button aria-label="Back" class="p-2 text-on-surface-variant dark:text-on-surface-variant hover:bg-primary-container/10 dark:hover:bg-primary-container/20 transition-colors active:scale-95 transition-transform duration-150 rounded-full">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">arrow_back</span>
+</button>
+<h1 class="font-title-md text-title-md text-primary dark:text-primary-fixed-dim font-bold tracking-tight">Cài đặt Tự động</h1>
+
+</header>
+<main class="pt-20 px-gutter max-w-lg mx-auto">
+<!-- Tabs -->
+<div class="flex gap-2 mb-6 p-1 bg-surface-container-low rounded-xl">
+<button class="flex-1 py-2 rounded-lg text-on-surface-variant font-label-md text-label-md hover:bg-surface-variant transition-all">Lịch trình</button>
+<button class="flex-1 py-2 rounded-lg bg-surface shadow-sm text-primary font-label-md text-label-md transition-all">Kích hoạt</button>
+</div>
+<!-- Schedules Section -->
+<section class="mb-8">
+<h2 class="font-title-md text-title-md text-on-surface mb-4">Kích hoạt theo Cảm biến</h2>
+<div class="space-y-4">
+<!-- Card 1: Soil Moisture Trigger -->
+<div class="glass-card rounded-[20px] p-4 flex flex-col gap-4">
+<div class="flex justify-between items-start">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-secondary-container/30 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">humidity_mid</span>
+</div>
+<div>
+<h3 class="font-title-md text-[16px] text-on-surface leading-snug">Độ ẩm đất</h3>
+<p class="font-body-sm text-on-surface-variant">Tưới khi &lt; 45%</p>
+</div>
+</div>
+<div class="relative inline-block w-12 h-6 align-middle select-none transition duration-200 ease-in">
+<input checked="" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 border-surface appearance-none cursor-pointer transition-colors duration-200 checked:border-primary z-10 shadow-sm" id="toggle3" name="toggle3" type="checkbox">
+<label class="toggle-label block overflow-hidden h-6 rounded-full bg-surface-variant cursor-pointer transition-transform duration-200" for="toggle3"></label>
+</div>
+</div>
+<div class="pt-3 border-t border-outline-variant/30 flex flex-col gap-1">
+<span class="font-label-md text-label-md text-on-surface-variant">Hành động</span>
+<span class="font-body-sm text-on-surface font-medium">Bật Bơm A (5 phút)</span>
+</div>
+</div>
+<!-- Card 2: Greenhouse Cooling -->
+<div class="glass-card rounded-[20px] p-4 flex flex-col gap-4">
+<div class="flex justify-between items-start">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-secondary-container/30 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">device_thermostat</span>
+</div>
+<div>
+<h3 class="font-title-md text-[16px] text-on-surface leading-snug">Làm mát nhà kính</h3>
+<p class="font-body-sm text-on-surface-variant">Kích hoạt khi &gt; 32°C</p>
+</div>
+</div>
+<div class="relative inline-block w-12 h-6 align-middle select-none transition duration-200 ease-in">
+<input checked="" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 border-surface appearance-none cursor-pointer transition-colors duration-200 checked:border-primary z-10 shadow-sm" id="toggle4" name="toggle4" type="checkbox">
+<label class="toggle-label block overflow-hidden h-6 rounded-full bg-surface-variant cursor-pointer transition-transform duration-200" for="toggle4"></label>
+</div>
+</div>
+<div class="pt-3 border-t border-outline-variant/30 flex flex-col gap-1">
+<span class="font-label-md text-label-md text-on-surface-variant">Hành động</span>
+<span class="font-body-sm text-on-surface font-medium">Mở quạt thông gió</span>
+</div>
+</div>
+</div>
+</section><section class="mt-8">
+<h2 class="font-title-md text-title-md text-on-surface mb-4">Lịch trình đang hoạt động</h2>
+<div class="space-y-4">
+<!-- Card 1: Morning Watering -->
+<div class="glass-card rounded-[20px] p-4 flex flex-col gap-4">
+<div class="flex justify-between items-start">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-secondary-container/30 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">water_drop</span>
+</div>
+<div>
+<h3 class="font-title-md text-[16px] text-on-surface leading-snug">Tưới nước buổi sáng</h3>
+<p class="font-body-sm text-on-surface-variant">06:00 AM • T2, T4, T6</p>
+</div>
+</div>
+<div class="relative inline-block w-12 h-6 align-middle select-none transition duration-200 ease-in">
+<input checked="" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 border-surface appearance-none cursor-pointer transition-colors duration-200 checked:border-primary z-10 shadow-sm" id="toggle1" name="toggle1" type="checkbox">
+<label class="toggle-label block overflow-hidden h-6 rounded-full bg-surface-variant cursor-pointer transition-transform duration-200" for="toggle1"></label>
+</div>
+</div>
+<div class="flex items-center justify-between pt-3 border-t border-outline-variant/30">
+<span class="font-label-md text-label-md text-on-surface-variant">Thời lượng</span>
+<span class="font-body-sm text-on-surface font-medium">15 phút</span>
+</div>
+</div>
+<!-- Card 2: Evening Watering -->
+<div class="glass-card rounded-[20px] p-4 flex flex-col gap-4 opacity-70">
+<div class="flex justify-between items-start">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-variant/50 flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined">nightlight</span>
+</div>
+<div>
+<h3 class="font-title-md text-[16px] text-on-surface leading-snug">Tưới nước buổi tối</h3>
+<p class="font-body-sm text-on-surface-variant">18:30 PM • Hàng ngày</p>
+</div>
+</div>
+<div class="relative inline-block w-12 h-6 align-middle select-none transition duration-200 ease-in">
+<input class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 border-surface appearance-none cursor-pointer transition-colors duration-200 z-10 shadow-sm" id="toggle2" name="toggle2" type="checkbox">
+<label class="toggle-label block overflow-hidden h-6 rounded-full bg-surface-variant cursor-pointer transition-transform duration-200" for="toggle2"></label>
+</div>
+</div>
+<div class="flex items-center justify-between pt-3 border-t border-outline-variant/30">
+<span class="font-label-md text-label-md text-on-surface-variant">Thời lượng</span>
+<span class="font-body-sm text-on-surface font-medium">10 phút</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Triggers Section -->
+<div class="fixed bottom-24 right-gutter z-50">
+<button class="flex items-center gap-2 bg-primary text-on-primary px-6 py-4 rounded-full shadow-lg hover:bg-primary-container transition-all active:scale-95">
+<span class="material-symbols-outlined">add</span>
+<span class="font-label-md font-bold">Thêm kích hoạt mới</span>
+</button>
+</div></main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 rounded-t-xl bg-surface/80 dark:bg-surface-container-lowest/80 backdrop-blur-xl bg-surface/80 dark:bg-surface-container-lowest/80 backdrop-blur-md shadow-[0_-4px_12px_rgba(0,0,0,0.05)] shadow-lg flex justify-around items-center h-20 px-2 pb-safe md:hidden">
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant px-4 py-1 hover:bg-surface-variant dark:hover:bg-surface-container-high transition-all active:scale-90 transition-transform duration-200 rounded-xl">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">dashboard</span>
+<span class="font-label-md text-[10px] mt-1">Dashboard</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant px-4 py-1 hover:bg-surface-variant dark:hover:bg-surface-container-high transition-all active:scale-90 transition-transform duration-200 rounded-xl">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">sensors</span>
+<span class="font-label-md text-[10px] mt-1">Sensors</span>
+</button>
+<button class="flex flex-col items-center justify-center bg-secondary-container dark:bg-secondary text-on-secondary-container dark:text-on-secondary rounded-full px-4 py-1 hover:bg-surface-variant dark:hover:bg-surface-container-high transition-all active:scale-90 transition-transform duration-200">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">settings_input_component</span>
+<span class="font-label-md text-[10px] mt-1">Automation</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant px-4 py-1 hover:bg-surface-variant dark:hover:bg-surface-container-high transition-all active:scale-90 transition-transform duration-200 rounded-xl">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">assessment</span>
+<span class="font-label-md text-[10px] mt-1">Reports</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant px-4 py-1 hover:bg-surface-variant dark:hover:bg-surface-container-high transition-all active:scale-90 transition-transform duration-200 rounded-xl">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">settings</span>
+<span class="font-label-md text-[10px] mt-1">Settings</span>
+</button>
+</nav>
+<script>
+        // Simple logic for custom toggle switch visual update (Tailwind form plugin handles mostly, this is fallback/extra)
+        const checkboxes = document.querySelectorAll('.toggle-checkbox');
+        checkboxes.forEach(cb => {
+            cb.addEventListener('change', function() {
+                const card = this.closest('.glass-card');
+                if(this.checked) {
+                    card.classList.remove('opacity-70');
+                } else {
+                    card.classList.add('opacity-70');
+                }
+            });
+        });
+    </script>
+
+
+</body></html>
+
+<!-- Thêm lịch trình mới -->
+<!DOCTYPE html>
+
+<html class="light" lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary": "#ffffff",
+                        "on-error": "#ffffff",
+                        "primary": "#0d631b",
+                        "error": "#ba1a1a",
+                        "surface": "#f7f9fc",
+                        "surface-container": "#eceef1",
+                        "on-background": "#191c1e",
+                        "on-primary-container": "#cbffc2",
+                        "tertiary-fixed-dim": "#90d792",
+                        "surface-container-highest": "#e0e3e6",
+                        "on-tertiary-container": "#c7ffc5",
+                        "on-surface-variant": "#40493d",
+                        "on-secondary-fixed-variant": "#005313",
+                        "on-secondary-fixed": "#002204",
+                        "surface-tint": "#1b6d24",
+                        "on-primary-fixed-variant": "#005312",
+                        "inverse-on-surface": "#eff1f4",
+                        "tertiary-fixed": "#abf4ac",
+                        "background": "#f7f9fc",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-fixed": "#002107",
+                        "primary-container": "#2e7d32",
+                        "inverse-primary": "#88d982",
+                        "primary-fixed": "#a3f69c",
+                        "on-surface": "#191c1e",
+                        "secondary": "#006e1c",
+                        "outline-variant": "#bfcaba",
+                        "error-container": "#ffdad6",
+                        "on-tertiary-fixed-variant": "#07521d",
+                        "surface-dim": "#d8dadd",
+                        "surface-bright": "#f7f9fc",
+                        "on-error-container": "#93000a",
+                        "on-tertiary": "#ffffff",
+                        "tertiary-container": "#387b41",
+                        "on-primary-fixed": "#002204",
+                        "on-primary": "#ffffff",
+                        "outline": "#707a6c",
+                        "primary-fixed-dim": "#88d982",
+                        "surface-variant": "#e0e3e6",
+                        "secondary-fixed": "#94f990",
+                        "on-secondary-container": "#00731e",
+                        "inverse-surface": "#2d3133",
+                        "tertiary": "#1d622b",
+                        "surface-container-low": "#f2f4f7",
+                        "surface-container-high": "#e6e8eb",
+                        "secondary-container": "#91f78e",
+                        "secondary-fixed-dim": "#78dc77"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "md": "16px",
+                        "lg": "24px",
+                        "container-margin": "20px",
+                        "base": "4px",
+                        "gutter": "16px",
+                        "xl": "32px",
+                        "xs": "8px",
+                        "sm": "12px"
+                    },
+                    "fontFamily": {
+                        "data-viz": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "title-md": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "label-md": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "display-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "data-viz": ["11px", {"lineHeight": "14px", "fontWeight": "600"}],
+                        "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "title-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "headline-lg": ["28px", {"lineHeight": "34px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "headline-lg-mobile": ["24px", {"lineHeight": "30px", "fontWeight": "600"}],
+                        "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "display-lg": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; background-color: #f7f9fc; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(12px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .day-toggle input:checked + div {
+            background-color: #2e7d32;
+            color: white;
+            border-color: #2e7d32;
+        }
+        .custom-switch input:checked + .switch-track {
+            background-color: #0d631b;
+        }
+        .custom-switch input:checked + .switch-track .switch-thumb {
+            transform: translateX(20px);
+        }
+        input[type="time"]::-webkit-calendar-picker-indicator {
+            filter: invert(32%) sepia(85%) saturate(464%) hue-rotate(85deg) brightness(91%) contrast(92%);
+            cursor: pointer;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface min-h-screen flex flex-col">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 w-full z-50 flex items-center px-container-margin py-xs bg-surface/70 dark:bg-surface-dim/70 backdrop-blur-xl shadow-sm">
+<button aria-label="Quay lại" class="p-2 -ml-2 rounded-full hover:bg-surface-container-highest transition-colors active:scale-95 duration-200">
+<span class="material-symbols-outlined text-primary">arrow_back</span>
+</button>
+<h1 class="ml-4 font-title-md text-title-md text-primary font-bold">Thêm lịch trình mới</h1>
+</header>
+<main class="flex-grow pt-24 pb-32 px-container-margin max-w-2xl mx-auto w-full">
+<div class="space-y-lg">
+<!-- Hero Image Visual -->
+<div class="relative h-48 rounded-xl overflow-hidden shadow-lg mb-xl group">
+<img alt="Irrigation system in a lush field" class="w-full h-full object-cover" data-alt="A cinematic close-up of a high-tech smart irrigation sprinkler head watering a vibrant green vegetable farm during a golden hour sunset. The water droplets catch the warm sunlight, creating a shimmering effect. In the background, rolling hills of sustainable crops stretch towards a clear horizon. The aesthetic is modern and clean, emphasizing precision technology integrated into nature with a fresh green and earthy palette." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC_MrAa_Sgd0DzgD72JRlJHq7nFpYUOAr3KvXjMXBvwGBLbCgznaKxdiDcsfGMNrVYzit_e1R8XJwIzV1mZM1-krA3f0Q6bq99ttu2_r4oOjRYNWyItBKLwgygvOmyGVpjnaSa5C0-xInqqHj2_RcGq7bGvDa7ZB1cQwzu976LIsk_rshEr7SWuh12lq5V0NICE1LzT2EmxSEmVXYSAG5OibosZpRINmzX5pnUrvU7kHTPx2i5rDoLnabB92u2TlwFsrLpXSfptIheb"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+<div class="absolute bottom-md left-md text-white">
+<p class="font-label-md text-label-md opacity-80 uppercase tracking-widest">Cấu hình tự động</p>
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile font-bold">Tối ưu hóa nguồn nước</h2>
+</div>
+</div>
+<!-- Main Config Section -->
+<section class="space-y-md">
+<!-- Time & Enable Toggle -->
+<div class="glass-card rounded-xl p-md flex items-center justify-between">
+<div class="flex items-center gap-md">
+<div class="bg-primary-container/20 p-sm rounded-lg">
+<span class="material-symbols-outlined text-primary">schedule</span>
+</div>
+<div>
+<p class="font-label-md text-label-md text-on-surface-variant">Kích hoạt lịch trình</p>
+<p class="font-body-sm text-body-sm text-on-surface/70">Chế độ tự động hiện tại</p>
+</div>
+</div>
+<label class="custom-switch relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="switch-track w-12 h-7 bg-surface-container-highest rounded-full transition-colors duration-300">
+<div class="switch-thumb absolute left-1 top-1 bg-white w-5 h-5 rounded-full shadow-md transition-transform duration-300"></div>
+</div>
+</label>
+</div>
+<!-- Time Picker -->
+<div class="glass-card rounded-xl p-md">
+<label class="block font-label-md text-label-md text-on-surface-variant mb-sm uppercase tracking-wider">Giờ bắt đầu
+<div class="relative">
+<input class="w-full bg-surface-container-low border border-outline-variant rounded-lg px-md py-sm text-title-md font-title-md text-primary focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all" type="time" value="06:00"/>
+</div>
+<p class="mt-xs font-body-sm text-body-sm text-on-surface-variant">Hệ thống sẽ tự động kích hoạt vào khung giờ này.</p>
+</label></div>
+<!-- Days of Week Selection -->
+<div class="glass-card rounded-xl p-md">
+<label class="block font-label-md text-label-md text-on-surface-variant mb-md uppercase tracking-wider">Ngày lặp lại</label>
+<div class="flex justify-between items-center gap-xs">
+<!-- Monday -->
+<label class="day-toggle flex-1 cursor-pointer">
+<input checked="" class="sr-only" type="checkbox"/>
+<div class="aspect-square flex items-center justify-center rounded-full border-2 border-outline-variant text-on-surface-variant font-label-md text-label-md transition-all active:scale-90">
+                                T2
+                            </div>
+</label>
+<!-- Tuesday -->
+<label class="day-toggle flex-1 cursor-pointer">
+<input checked="" class="sr-only" type="checkbox"/>
+<div class="aspect-square flex items-center justify-center rounded-full border-2 border-outline-variant text-on-surface-variant font-label-md text-label-md transition-all active:scale-90">
+                                T3
+                            </div>
+</label>
+<!-- Wednesday -->
+<label class="day-toggle flex-1 cursor-pointer">
+<input checked="" class="sr-only" type="checkbox"/>
+<div class="aspect-square flex items-center justify-center rounded-full border-2 border-outline-variant text-on-surface-variant font-label-md text-label-md transition-all active:scale-90">
+                                T4
+                            </div>
+</label>
+<!-- Thursday -->
+<label class="day-toggle flex-1 cursor-pointer">
+<input checked="" class="sr-only" type="checkbox"/>
+<div class="aspect-square flex items-center justify-center rounded-full border-2 border-outline-variant text-on-surface-variant font-label-md text-label-md transition-all active:scale-90">
+                                T5
+                            </div>
+</label>
+<!-- Friday -->
+<label class="day-toggle flex-1 cursor-pointer">
+<input checked="" class="sr-only" type="checkbox"/>
+<div class="aspect-square flex items-center justify-center rounded-full border-2 border-outline-variant text-on-surface-variant font-label-md text-label-md transition-all active:scale-90">
+                                T6
+                            </div>
+</label>
+<!-- Saturday -->
+<label class="day-toggle flex-1 cursor-pointer">
+<input class="sr-only" type="checkbox"/>
+<div class="aspect-square flex items-center justify-center rounded-full border-2 border-outline-variant text-on-surface-variant font-label-md text-label-md transition-all active:scale-90">
+                                T7
+                            </div>
+</label>
+<!-- Sunday -->
+<label class="day-toggle flex-1 cursor-pointer">
+<input class="sr-only" type="checkbox"/>
+<div class="aspect-square flex items-center justify-center rounded-full border-2 border-outline-variant text-on-surface-variant font-label-md text-label-md transition-all active:scale-90">
+                                CN
+                            </div>
+</label>
+</div>
+</div>
+<!-- Duration Setting -->
+<div class="glass-card rounded-xl p-md">
+<div class="flex justify-between items-center mb-md">
+<label class="block font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Thời lượng tưới</label>
+<span class="font-title-md text-title-md text-primary font-bold" id="duration-val">15 phút</span>
+</div>
+<div class="relative py-base">
+<input class="w-full h-2 bg-surface-container-highest rounded-lg appearance-none cursor-pointer accent-primary" id="duration-range" max="120" min="1" type="range" value="15"/>
+</div>
+<div class="flex justify-between mt-sm">
+<span class="text-label-md font-label-md text-on-surface-variant/60">1p</span>
+<span class="text-label-md font-label-md text-on-surface-variant/60">120p</span>
+</div>
+</div>
+<!-- Advanced Settings (Hint) -->
+<div class="p-md bg-secondary-container/10 border border-secondary-container/20 rounded-xl flex gap-md items-start">
+<span class="material-symbols-outlined text-secondary text-[20px]">info</span>
+<p class="font-body-sm text-body-sm text-on-secondary-fixed-variant">
+<strong>Gợi ý từ AI:</strong> Dựa trên dự báo thời tiết ngày mai, việc tưới vào lúc 06:00 sẽ giúp giảm thất thoát nước do bay hơi lên tới 15%.
+                    </p>
+</div>
+</section>
+</div>
+</main>
+<!-- Bottom Actions -->
+<div class="fixed bottom-0 left-0 w-full p-container-margin bg-surface/70 backdrop-blur-xl z-50">
+<button class="w-full py-md bg-gradient-to-r from-primary to-secondary text-white rounded-full font-title-md text-title-md font-bold shadow-lg shadow-primary/20 active:scale-95 transition-all duration-200">
+            Lưu lịch trình
+        </button>
+</div>
+<!-- Micro-interaction Scripts -->
+<script>
+        const range = document.getElementById('duration-range');
+        const valDisplay = document.getElementById('duration-val');
+
+        range.addEventListener('input', (e) => {
+            valDisplay.textContent = `${e.target.value} phút`;
+            
+            // Haptic feedback simulation or scale effect
+            valDisplay.style.transform = 'scale(1.1)';
+            setTimeout(() => {
+                valDisplay.style.transform = 'scale(1)';
+            }, 100);
+        });
+
+        // Toggle animation logic handled by CSS but adding JS for feedback
+        document.querySelectorAll('.day-toggle input').forEach(input => {
+            input.addEventListener('change', () => {
+                if(window.navigator.vibrate) {
+                    window.navigator.vibrate(10);
+                }
+            });
+        });
+
+        // Add glassmorphic scroll effect to header
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 20) {
+                header.classList.add('shadow-md');
+                header.classList.remove('shadow-sm');
+            } else {
+                header.classList.add('shadow-sm');
+                header.classList.remove('shadow-md');
+            }
+        });
+    </script>
+</body></html>
+
+<!-- Cấu hình Tưới tiêu -->
+<!DOCTYPE html>
+
+<html lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Thêm kích hoạt mới - Tưới tiêu</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-lowest": "#ffffff",
+                        "surface-bright": "#f7f9fc",
+                        "surface-container": "#eceef1",
+                        "on-secondary-container": "#00731e",
+                        "surface-container-low": "#f2f4f7",
+                        "secondary-fixed-dim": "#78dc77",
+                        "on-surface-variant": "#40493d",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "inverse-surface": "#2d3133",
+                        "error": "#ba1a1a",
+                        "on-primary-container": "#cbffc2",
+                        "on-background": "#191c1e",
+                        "background": "#f7f9fc",
+                        "error-container": "#ffdad6",
+                        "on-tertiary-container": "#c7ffc5",
+                        "surface-dim": "#d8dadd",
+                        "on-error-container": "#93000a",
+                        "primary": "#0d631b",
+                        "tertiary-fixed-dim": "#90d792",
+                        "on-error": "#ffffff",
+                        "on-primary-fixed-variant": "#005312",
+                        "surface-container-high": "#e6e8eb",
+                        "outline": "#707a6c",
+                        "on-tertiary-fixed-variant": "#07521d",
+                        "inverse-primary": "#88d982",
+                        "primary-fixed": "#a3f69c",
+                        "primary-container": "#2e7d32",
+                        "surface-container-highest": "#e0e3e6",
+                        "on-primary-fixed": "#002204",
+                        "tertiary": "#1d622b",
+                        "secondary-fixed": "#94f990",
+                        "outline-variant": "#bfcaba",
+                        "on-tertiary-fixed": "#002107",
+                        "on-surface": "#191c1e",
+                        "tertiary-container": "#387b41",
+                        "primary-fixed-dim": "#88d982",
+                        "surface": "#f7f9fc",
+                        "on-secondary-fixed-variant": "#005313",
+                        "surface-tint": "#1b6d24",
+                        "surface-variant": "#e0e3e6",
+                        "secondary": "#006e1c",
+                        "on-primary": "#ffffff",
+                        "tertiary-fixed": "#abf4ac",
+                        "inverse-on-surface": "#eff1f4",
+                        "on-secondary-fixed": "#002204",
+                        "secondary-container": "#91f78e"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "sm": "12px",
+                        "xs": "8px",
+                        "gutter": "16px",
+                        "container-margin": "20px",
+                        "base": "4px",
+                        "xl": "32px",
+                        "lg": "24px",
+                        "md": "16px"
+                    },
+                    "fontFamily": {
+                        "body-sm": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "data-viz": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "label-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "title-md": ["Inter"],
+                        "headline-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "30px", "fontWeight": "600" }],
+                        "data-viz": ["11px", { "lineHeight": "14px", "fontWeight": "600" }],
+                        "display-lg": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "title-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "headline-lg": ["28px", { "lineHeight": "34px", "letterSpacing": "-0.01em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        /* Custom range slider styling */
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 20px;
+            width: 20px;
+            border-radius: 50%;
+            background: #0d631b;
+            cursor: pointer;
+            margin-top: -8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 4px;
+            cursor: pointer;
+            background: #e0e3e6;
+            border-radius: 2px;
+        }
+        input[type=range]:focus {
+            outline: none;
+        }
+        .bg-glass {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background antialiased min-h-screen pb-32">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-container-margin py-xs bg-surface/70 backdrop-blur-md shadow-sm">
+<div class="flex items-center gap-sm">
+<button class="text-on-surface-variant hover:bg-surface-container-highest p-2 rounded-full transition-colors active:scale-95 duration-200">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">arrow_back</span>
+</button>
+<h1 class="font-title-md text-title-md text-on-surface">Thêm kích hoạt mới</h1>
+</div>
+<button class="text-primary font-label-md text-label-md px-4 py-2 rounded-full bg-primary-container/10 hover:bg-primary-container/20 transition-colors active:scale-95 duration-200">
+            Lưu
+        </button>
+</header>
+<!-- Main Content -->
+<main class="pt-[72px] px-container-margin max-w-3xl mx-auto space-y-lg">
+<!-- Device Selection -->
+<section class="bg-surface-container-lowest rounded-[20px] p-md shadow-sm border border-surface-variant/50">
+<h2 class="font-title-md text-title-md mb-md text-on-surface">Thiết bị</h2>
+<div class="flex gap-sm overflow-x-auto pb-2 -mx-md px-md md:mx-0 md:px-0">
+<button class="flex items-center gap-2 px-4 py-2 rounded-full bg-surface-container border border-surface-variant text-on-surface-variant whitespace-nowrap active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-[20px]">wb_sunny</span>
+<span class="font-label-md text-label-md">Chiếu sáng</span>
+</button>
+<button class="flex items-center gap-2 px-4 py-2 rounded-full bg-primary-container text-on-primary-container border border-primary whitespace-nowrap active:scale-95 transition-transform shadow-[0_2px_8px_rgba(46,125,50,0.2)]">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">water_drop</span>
+<span class="font-label-md text-label-md">Tưới tiêu</span>
+</button>
+<button class="flex items-center gap-2 px-4 py-2 rounded-full bg-surface-container border border-surface-variant text-on-surface-variant whitespace-nowrap active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-[20px]">air</span>
+<span class="font-label-md text-label-md">Thông gió</span>
+</button>
+</div>
+</section>
+<!-- Trigger Conditions -->
+<section class="bg-surface-container-lowest rounded-[20px] p-md shadow-sm border border-surface-variant/50">
+<div class="flex justify-between items-center mb-md">
+<h2 class="font-title-md text-title-md text-on-surface">Điều kiện kích hoạt (NẾU)</h2>
+</div>
+<div class="space-y-md">
+<!-- Condition 1: Soil Moisture -->
+<div class="bg-surface-bright rounded-xl p-md border border-surface-variant">
+<div class="flex justify-between items-start mb-sm">
+<div class="flex items-center gap-3">
+<div class="bg-tertiary-container/20 p-2 rounded-lg text-tertiary">
+<span class="material-symbols-outlined">grass</span>
+</div>
+<div>
+<h3 class="font-body-lg text-body-lg font-medium text-on-surface">Độ ẩm đất</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Vùng 1 (Cà chua)</p>
+</div>
+</div>
+<button class="text-on-surface-variant hover:text-error transition-colors">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<div class="flex items-center gap-4 mt-lg">
+<div class="relative w-full">
+<input class="w-full h-1 bg-surface-variant rounded-lg appearance-none cursor-pointer" max="100" min="0" type="range" value="40"/>
+<div class="absolute -top-6 left-[40%] transform -translate-x-1/2 text-primary font-data-viz text-data-viz bg-primary-container/20 px-2 py-1 rounded">
+                                &lt; 40%
+                            </div>
+</div>
+</div>
+</div>
+<!-- Logical AND Operator -->
+<div class="flex justify-center -my-2 relative z-10">
+<span class="bg-secondary-container text-on-secondary-container font-label-md text-label-md px-3 py-1 rounded-full border border-secondary shadow-sm">
+                        VÀ
+                    </span>
+</div>
+<!-- Condition 2: Water Level -->
+<div class="bg-surface-bright rounded-xl p-md border border-surface-variant">
+<div class="flex justify-between items-start mb-sm">
+<div class="flex items-center gap-3">
+<div class="bg-secondary-container/20 p-2 rounded-lg text-secondary">
+<span class="material-symbols-outlined">water</span>
+</div>
+<div>
+<h3 class="font-body-lg text-body-lg font-medium text-on-surface">Mực nước bể</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Bể chứa chính</p>
+</div>
+</div>
+<button class="text-on-surface-variant hover:text-error transition-colors">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<div class="flex items-center gap-4 mt-lg">
+<div class="relative w-full">
+<input class="w-full h-1 bg-surface-variant rounded-lg appearance-none cursor-pointer" max="100" min="0" type="range" value="20"/>
+<div class="absolute -top-6 left-[20%] transform -translate-x-1/2 text-secondary font-data-viz text-data-viz bg-secondary-container/20 px-2 py-1 rounded">
+                                &gt; 20%
+                            </div>
+</div>
+</div>
+</div>
+<button class="w-full py-3 border-2 border-dashed border-outline-variant text-on-surface-variant rounded-xl font-body-sm text-body-sm font-medium hover:bg-surface-container hover:border-primary transition-all flex justify-center items-center gap-2">
+<span class="material-symbols-outlined">add</span>
+                    Thêm điều kiện
+                </button>
+</div>
+</section>
+<!-- Action -->
+<section class="bg-surface-container-lowest rounded-[20px] p-md shadow-sm border border-surface-variant/50">
+<h2 class="font-title-md text-title-md mb-md text-on-surface">Hành động (THÌ)</h2>
+<div class="bg-surface-bright rounded-xl p-md border border-surface-variant flex flex-col gap-4">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="bg-primary-container p-2 rounded-lg text-on-primary-container">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">water_drop</span>
+</div>
+<span class="font-body-lg text-body-lg font-medium text-on-surface">Bật máy bơm</span>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox" value=""/>
+<div class="w-11 h-6 bg-surface-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary shadow-inner"></div>
+</label>
+</div>
+<div class="flex items-center gap-3 bg-surface p-3 rounded-lg border border-surface-variant">
+<span class="material-symbols-outlined text-on-surface-variant">timer</span>
+<span class="font-body-sm text-body-sm text-on-surface flex-grow">Trong thời gian</span>
+<input class="w-16 bg-surface-bright border border-outline-variant text-center rounded-md py-1 font-body-sm text-body-sm text-on-surface focus:border-primary focus:ring-0" type="number" value="15"/>
+<span class="font-body-sm text-body-sm text-on-surface-variant">phút</span>
+</div>
+</div>
+</section>
+<!-- Time Limits -->
+<section class="bg-surface-container-lowest rounded-[20px] p-md shadow-sm border border-surface-variant/50">
+<div class="flex items-center justify-between mb-sm">
+<h2 class="font-title-md text-title-md text-on-surface">Giới hạn thời gian</h2>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox" value=""/>
+<div class="w-11 h-6 bg-surface-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary shadow-inner"></div>
+</label>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-md">Chỉ chạy tự động trong khung giờ ban ngày để tiết kiệm điện.</p>
+<div class="flex items-center gap-4">
+<div class="flex-1 bg-surface-bright p-3 rounded-lg border border-surface-variant flex items-center justify-between">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Từ</span>
+<span class="font-body-lg text-body-lg font-medium text-on-surface">06:00</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant">arrow_forward</span>
+<div class="flex-1 bg-surface-bright p-3 rounded-lg border border-surface-variant flex items-center justify-between">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Đến</span>
+<span class="font-body-lg text-body-lg font-medium text-on-surface">18:00</span>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar (Hidden on md/desktop as per Semantic Shell logic) -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-sm pb-safe pt-xs bg-surface/70 dark:bg-surface-dim/70 backdrop-blur-xl rounded-t-xl shadow-lg border-t-0 md:hidden">
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-lg py-base hover:bg-surface-container-high transition-all active:scale-90 duration-150 rounded-lg" href="#">
+<span class="material-symbols-outlined text-[24px]">dashboard</span>
+<span class="font-label-md text-label-md mt-1">Dashboard</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-lg py-base hover:bg-surface-container-high transition-all active:scale-90 duration-150 rounded-lg" href="#">
+<span class="material-symbols-outlined text-[24px]">sensors</span>
+<span class="font-label-md text-label-md mt-1">Sensors</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-full px-lg py-base active:scale-90 duration-150" href="#">
+<span class="material-symbols-outlined text-[24px]" style="font-variation-settings: 'FILL' 1;">settings_input_component</span>
+<span class="font-label-md text-label-md mt-1">Automation</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-lg py-base hover:bg-surface-container-high transition-all active:scale-90 duration-150 rounded-lg" href="#">
+<span class="material-symbols-outlined text-[24px]">analytics</span>
+<span class="font-label-md text-label-md mt-1">Reports</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-lg py-base hover:bg-surface-container-high transition-all active:scale-90 duration-150 rounded-lg" href="#">
+<span class="material-symbols-outlined text-[24px]">settings</span>
+<span class="font-label-md text-label-md mt-1">Settings</span>
+</a>
+</nav>
+</body></html>
+
+<!-- Cấu hình Đèn quang hợp -->
+<!DOCTYPE html>
+
+<html lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Thêm kích hoạt mới - Đèn quang hợp</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-container-lowest": "#ffffff",
+                      "surface-bright": "#f7f9fc",
+                      "surface-container": "#eceef1",
+                      "on-secondary-container": "#00731e",
+                      "surface-container-low": "#f2f4f7",
+                      "secondary-fixed-dim": "#78dc77",
+                      "on-surface-variant": "#40493d",
+                      "on-tertiary": "#ffffff",
+                      "on-secondary": "#ffffff",
+                      "inverse-surface": "#2d3133",
+                      "error": "#ba1a1a",
+                      "on-primary-container": "#cbffc2",
+                      "on-background": "#191c1e",
+                      "background": "#f7f9fc",
+                      "error-container": "#ffdad6",
+                      "on-tertiary-container": "#c7ffc5",
+                      "surface-dim": "#d8dadd",
+                      "on-error-container": "#93000a",
+                      "primary": "#0d631b",
+                      "tertiary-fixed-dim": "#90d792",
+                      "on-error": "#ffffff",
+                      "on-primary-fixed-variant": "#005312",
+                      "surface-container-high": "#e6e8eb",
+                      "outline": "#707a6c",
+                      "on-tertiary-fixed-variant": "#07521d",
+                      "inverse-primary": "#88d982",
+                      "primary-fixed": "#a3f69c",
+                      "primary-container": "#2e7d32",
+                      "surface-container-highest": "#e0e3e6",
+                      "on-primary-fixed": "#002204",
+                      "tertiary": "#1d622b",
+                      "secondary-fixed": "#94f990",
+                      "outline-variant": "#bfcaba",
+                      "on-tertiary-fixed": "#002107",
+                      "on-surface": "#191c1e",
+                      "tertiary-container": "#387b41",
+                      "primary-fixed-dim": "#88d982",
+                      "surface": "#f7f9fc",
+                      "on-secondary-fixed-variant": "#005313",
+                      "surface-tint": "#1b6d24",
+                      "surface-variant": "#e0e3e6",
+                      "secondary": "#006e1c",
+                      "on-primary": "#ffffff",
+                      "tertiary-fixed": "#abf4ac",
+                      "inverse-on-surface": "#eff1f4",
+                      "on-secondary-fixed": "#002204",
+                      "secondary-container": "#91f78e"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "sm": "12px",
+                      "xs": "8px",
+                      "gutter": "16px",
+                      "container-margin": "20px",
+                      "base": "4px",
+                      "xl": "32px",
+                      "lg": "24px",
+                      "md": "16px"
+              },
+              "fontFamily": {
+                      "body-sm": [
+                              "Inter"
+                      ],
+                      "headline-lg-mobile": [
+                              "Inter"
+                      ],
+                      "data-viz": [
+                              "Inter"
+                      ],
+                      "display-lg": [
+                              "Inter"
+                      ],
+                      "label-md": [
+                              "Inter"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "title-md": [
+                              "Inter"
+                      ],
+                      "headline-lg": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "body-sm": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "24px",
+                              {
+                                      "lineHeight": "30px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "data-viz": [
+                              "11px",
+                              {
+                                      "lineHeight": "14px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "display-lg": [
+                              "36px",
+                              {
+                                      "lineHeight": "44px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "label-md": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "body-lg": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "title-md": [
+                              "20px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-lg": [
+                              "28px",
+                              {
+                                      "lineHeight": "34px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+    </script>
+<style>
+        body {
+            -webkit-tap-highlight-color: transparent;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.fill-icon {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        /* Custom Range Slider */
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 24px;
+            width: 24px;
+            border-radius: 50%;
+            background: #ffffff;
+            cursor: pointer;
+            margin-top: -10px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            border: 2px solid #0d631b;
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 4px;
+            cursor: pointer;
+            background: linear-gradient(to right, #0d631b 50%, #e0e3e6 50%);
+            border-radius: 2px;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface-bright text-on-surface min-h-screen pb-safe">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-container-margin py-xs bg-surface/70 dark:bg-surface-dim/70 backdrop-blur-xl shadow-sm">
+<button aria-label="Go back" class="text-on-surface-variant hover:bg-surface-container-highest p-2 rounded-full transition-colors active:scale-95 duration-200">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h1 class="font-title-md text-title-md text-primary dark:text-primary-fixed">Thêm kích hoạt mới</h1>
+<div class="w-10"></div> <!-- Spacer for centering -->
+</header>
+<!-- Main Content Canvas -->
+<main class="pt-[72px] px-container-margin pb-32 max-w-3xl mx-auto space-y-lg">
+<!-- Device Selection Bento -->
+<section class="bg-surface-container-lowest rounded-xl p-md shadow-[0_4px_12px_rgba(0,0,0,0.05)] border border-surface-variant">
+<h2 class="font-body-sm text-body-sm text-on-surface-variant mb-sm uppercase tracking-wider">Chọn Thiết Bị</h2>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-sm">
+<!-- Inactive Device -->
+<div class="bg-surface-container-low rounded-lg p-sm flex flex-col items-center justify-center gap-xs cursor-pointer hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-outline">water_drop</span>
+<span class="font-label-md text-label-md text-on-surface-variant text-center">Bơm 1</span>
+</div>
+<!-- Active Device -->
+<div class="bg-primary-container rounded-lg p-sm flex flex-col items-center justify-center gap-xs cursor-pointer shadow-md border-2 border-primary">
+<span class="material-symbols-outlined fill-icon text-on-primary-container">lightbulb</span>
+<span class="font-label-md text-label-md text-on-primary-container text-center font-bold">Đèn QH</span>
+</div>
+<!-- Inactive Device -->
+<div class="bg-surface-container-low rounded-lg p-sm flex flex-col items-center justify-center gap-xs cursor-pointer hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-outline">air</span>
+<span class="font-label-md text-label-md text-on-surface-variant text-center">Quạt TH</span>
+</div>
+<!-- Inactive Device -->
+<div class="bg-surface-container-low rounded-lg p-sm flex flex-col items-center justify-center gap-xs cursor-pointer hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-outline">valve</span>
+<span class="font-label-md text-label-md text-on-surface-variant text-center">Van 2</span>
+</div>
+</div>
+</section>
+<!-- Trigger Conditions Bento -->
+<section class="bg-surface-container-lowest rounded-xl p-md shadow-[0_4px_12px_rgba(0,0,0,0.05)] border border-surface-variant">
+<h2 class="font-body-sm text-body-sm text-on-surface-variant mb-sm uppercase tracking-wider">Điều Kiện Kích Hoạt</h2>
+<div class="space-y-lg">
+<!-- Sensor Threshold -->
+<div>
+<div class="flex justify-between items-center mb-sm">
+<div class="flex items-center gap-2">
+<div class="bg-tertiary-container/20 p-2 rounded-full">
+<span class="material-symbols-outlined text-tertiary text-[20px]">wb_sunny</span>
+</div>
+<span class="font-body-lg text-body-lg font-medium text-on-surface">Cường độ ánh sáng</span>
+</div>
+<span class="font-title-md text-title-md text-primary font-bold"> &lt; 500 Lux</span>
+</div>
+<div class="px-2 pt-4 pb-2">
+<input class="w-full" id="light-slider" max="2000" min="0" type="range" value="500"/>
+<div class="flex justify-between mt-2 font-data-viz text-data-viz text-outline">
+<span>0 Lux</span>
+<span>2000 Lux</span>
+</div>
+</div>
+</div>
+<hr class="border-surface-variant"/>
+<!-- Smart Condition Toggle -->
+<div class="flex items-start justify-between gap-md">
+<div class="flex-1">
+<div class="flex items-center gap-2 mb-1">
+<span class="material-symbols-outlined text-secondary fill-icon text-[18px]">psychology</span>
+<span class="font-body-lg text-body-lg font-medium text-on-surface">Điều kiện thông minh</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                            Chỉ kích hoạt khi ánh sáng tự nhiên không đủ trong ngày. Tránh bật đèn khi có mây che tạm thời.
+                        </p>
+</div>
+<!-- Modern Switch -->
+<label class="relative inline-flex items-center cursor-pointer pt-1">
+<input checked="" class="sr-only peer" type="checkbox" value=""/>
+<div class="w-11 h-6 bg-surface-container-high rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[6px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary shadow-inner"></div>
+</label>
+</div>
+</div>
+</section>
+<!-- Action Bento -->
+<section class="bg-surface-container-lowest rounded-xl p-md shadow-[0_4px_12px_rgba(0,0,0,0.05)] border border-surface-variant">
+<h2 class="font-body-sm text-body-sm text-on-surface-variant mb-sm uppercase tracking-wider">Hành Động</h2>
+<div class="flex gap-4">
+<button class="flex-1 bg-primary text-on-primary py-3 rounded-lg font-body-lg text-body-lg font-medium shadow-md border-2 border-primary flex justify-center items-center gap-2 transition-all active:scale-95">
+<span class="material-symbols-outlined fill-icon">power_settings_new</span>
+                    Bật Đèn
+                </button>
+<button class="flex-1 bg-surface-container-lowest text-on-surface py-3 rounded-lg font-body-lg text-body-lg font-medium shadow-sm border border-outline-variant hover:bg-surface-container-low flex justify-center items-center gap-2 transition-all active:scale-95">
+<span class="material-symbols-outlined">power_settings_new</span>
+                    Tắt Đèn
+                </button>
+</div>
+</section>
+<!-- Time Limits Bento -->
+<section class="bg-surface-container-lowest rounded-xl p-md shadow-[0_4px_12px_rgba(0,0,0,0.05)] border border-surface-variant">
+<h2 class="font-body-sm text-body-sm text-on-surface-variant mb-sm uppercase tracking-wider">Khung Giờ Hoạt Động</h2>
+<div class="flex items-center justify-between gap-md">
+<div class="flex-1">
+<label class="block font-label-md text-label-md text-outline mb-1">Bắt đầu</label>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+<span class="material-symbols-outlined text-outline">schedule</span>
+</div>
+<input class="bg-surface-bright border border-outline-variant text-on-surface text-sm rounded-lg focus:ring-primary focus:border-primary block w-full pl-10 p-2.5" type="time" value="06:00"/>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline mt-5">arrow_forward</span>
+<div class="flex-1">
+<label class="block font-label-md text-label-md text-outline mb-1">Kết thúc</label>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+<span class="material-symbols-outlined text-outline">schedule</span>
+</div>
+<input class="bg-surface-bright border border-outline-variant text-on-surface text-sm rounded-lg focus:ring-primary focus:border-primary block w-full pl-10 p-2.5" type="time" value="18:00"/>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Floating Action Bar (Save) -->
+<div class="fixed bottom-0 left-0 w-full p-container-margin bg-surface-container-lowest/90 backdrop-blur-xl border-t border-surface-variant shadow-[0_-8px_20px_rgba(0,0,0,0.05)] z-40">
+<div class="max-w-3xl mx-auto flex gap-4">
+<button class="flex-1 py-3 px-6 rounded-full font-title-md text-title-md text-on-surface-variant bg-surface-container hover:bg-surface-container-high transition-colors">
+                Hủy
+            </button>
+<button class="flex-[2] py-3 px-6 rounded-full font-title-md text-title-md text-on-primary bg-primary shadow-lg hover:bg-primary/90 transition-colors flex justify-center items-center gap-2">
+<span class="material-symbols-outlined">save</span>
+                Lưu Kích Hoạt
+            </button>
+</div>
+</div>
+<script>
+        // Simple slider visual update
+        const slider = document.getElementById('light-slider');
+        slider.addEventListener('input', function() {
+            const value = (this.value - this.min) / (this.max - this.min) * 100;
+            this.style.background = `linear-gradient(to right, #0d631b ${value}%, #e0e3e6 ${value}%)`;
+        });
+    </script>
+</body></html>

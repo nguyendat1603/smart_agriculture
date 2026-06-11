@@ -24,6 +24,7 @@ class AppTheme {
   static const Color onErrorContainer = Color(0xFF93000A);
 
   static const Color surfaceVariant = Color(0xFFE0E3E6);
+  static const Color surfaceContainerLowest = Color(0xFFFFFFFF);
   static const Color surfaceContainerLow = Color(0xFFF2F4F7);
   static const Color surfaceContainer = Color(0xFFECEEF1);
   static const Color surfaceContainerHigh = Color(0xFFE6E8EB);
