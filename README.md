@@ -74,3 +74,4 @@ File APK sau khi build thành công sẽ nằm ở đường dẫn: `build/app/o
 - `supabase_flutter`: Kết nối dịch vụ Supabase.
 - `mailer`: Gửi email.
 - `image_picker`: Chọn ảnh từ thiết bị.
+/////
