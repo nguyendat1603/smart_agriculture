@@ -17,6 +17,8 @@ import 'views/reset_password_view.dart';
 import 'views/main_layout.dart';
 import 'views/add_trigger_view.dart';
 import 'views/add_schedule_view.dart';
+import 'views/health_analysis_view.dart';
+import 'viewmodels/health_analysis_viewmodel.dart';
 import 'theme/app_theme.dart';
 
 void main() async {
@@ -53,6 +55,7 @@ void main() async {
           create: (_) => AutomationViewModel(),
           update: (_, sensorVM, automationVM) => automationVM!..updateSensor(sensorVM),
         ),
+        ChangeNotifierProvider(create: (_) => HealthAnalysisViewModel()),
       ],
       child: const MyApp(),
     ),
@@ -80,6 +83,7 @@ class MyApp extends StatelessWidget {
         '/reset_password': (context) => const ResetPasswordView(),
         '/add_trigger': (context) => const AddTriggerView(),
         '/add_schedule': (context) => const AddScheduleView(),
+        '/health_analysis': (context) => const HealthAnalysisView(),
       },
     );
   }
