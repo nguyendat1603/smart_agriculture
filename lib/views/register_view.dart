@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'dart:ui';
 import '../theme/app_theme.dart';
 import '../viewmodels/auth_viewmodel.dart';
+import '../l10n/app_translations.dart';
 
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
@@ -27,7 +28,7 @@ class _RegisterViewState extends State<RegisterView> {
     final password = _passwordController.text;
 
     if (name.isEmpty || email.isEmpty || phone.isEmpty || password.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Vui lòng điền đủ thông tin')));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Please fill all fields'.tr(context))));
       return;
     }
 
@@ -103,18 +104,18 @@ class _RegisterViewState extends State<RegisterView> {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          const Text(
-                            'Tạo Tài Khoản',
-                            style: TextStyle(
+                          Text(
+                            'Create Account'.tr(context),
+                            style: const TextStyle(
                               color: AppTheme.primary,
                               fontSize: 28,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                           const SizedBox(height: 8),
-                          const Text(
-                            'Vui lòng điền thông tin để bắt đầu sử dụng hệ thống.',
-                            style: TextStyle(
+                          Text(
+                            'Please fill out the form to start using the system.'.tr(context),
+                            style: const TextStyle(
                               color: AppTheme.onSurfaceVariant,
                               fontSize: 14,
                             ),
@@ -122,22 +123,22 @@ class _RegisterViewState extends State<RegisterView> {
                           ),
                           const SizedBox(height: 32),
 
-                          _buildTextField(controller: _nameController, label: 'Họ và Tên', hint: 'Nguyễn Văn A', icon: Icons.person),
+                          _buildTextField(controller: _nameController, label: 'Full Name'.tr(context), hint: 'Nguyễn Văn A', icon: Icons.person),
                           const SizedBox(height: 16),
-                          _buildTextField(controller: _emailController, label: 'Email', hint: 'email@example.com', icon: Icons.mail, keyboardType: TextInputType.emailAddress),
+                          _buildTextField(controller: _emailController, label: 'Email'.tr(context), hint: 'email@example.com', icon: Icons.mail, keyboardType: TextInputType.emailAddress),
                           const SizedBox(height: 16),
-                          _buildTextField(controller: _phoneController, label: 'Số điện thoại', hint: '090 123 4567', icon: Icons.phone, keyboardType: TextInputType.phone),
+                          _buildTextField(controller: _phoneController, label: 'Phone Number'.tr(context), hint: '090 123 4567', icon: Icons.phone, keyboardType: TextInputType.phone),
                           const SizedBox(height: 16),
                           
                           // Password
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Padding(
-                                padding: EdgeInsets.only(bottom: 8),
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 8),
                                 child: Text(
-                                  'Mật khẩu',
-                                  style: TextStyle(
+                                  'Password'.tr(context),
+                                  style: const TextStyle(
                                     color: AppTheme.onSurfaceVariant,
                                     fontSize: 12,
                                     fontWeight: FontWeight.w500,
@@ -194,15 +195,15 @@ class _RegisterViewState extends State<RegisterView> {
                             ),
                             child: authVM.isLoading 
                               ? const CircularProgressIndicator(color: Colors.white)
-                              : const Row(
+                              : Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      'Đăng ký',
-                                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                                      'Register'.tr(context),
+                                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                                     ),
-                                    SizedBox(width: 8),
-                                    Icon(Icons.arrow_forward, size: 20),
+                                    const SizedBox(width: 8),
+                                    const Icon(Icons.arrow_forward, size: 20),
                                   ],
                                 ),
                           ),
@@ -211,17 +212,17 @@ class _RegisterViewState extends State<RegisterView> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              const Text(
-                                'Đã có tài khoản? ',
-                                style: TextStyle(color: AppTheme.onSurfaceVariant),
+                              Text(
+                                '${'Already have an account?'.tr(context)} ',
+                                style: const TextStyle(color: AppTheme.onSurfaceVariant),
                               ),
                               GestureDetector(
                                 onTap: () {
                                   Navigator.pop(context);
                                 },
-                                child: const Text(
-                                  'Đăng nhập',
-                                  style: TextStyle(
+                                child: Text(
+                                  'Login'.tr(context),
+                                  style: const TextStyle(
                                     color: AppTheme.primary,
                                     fontWeight: FontWeight.bold,
                                   ),

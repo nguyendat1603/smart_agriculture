@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'dart:ui';
 import '../theme/app_theme.dart';
 import '../viewmodels/auth_viewmodel.dart';
+import '../l10n/app_translations.dart';
 
 class ForgotPasswordView extends StatefulWidget {
   const ForgotPasswordView({super.key});
@@ -19,7 +20,7 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
     final email = _emailController.text.trim();
 
     if (email.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Vui lòng nhập email')));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Please enter email'.tr(context))));
       return;
     }
 
@@ -118,19 +119,19 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
                                 ),
                               ),
                               const SizedBox(height: 24),
-                              const Text(
-                                'Quên mật khẩu',
-                                style: TextStyle(
+                              Text(
+                                'Forgot Password'.tr(context),
+                                style: const TextStyle(
                                   color: AppTheme.onSurface,
                                   fontSize: 24,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
                               const SizedBox(height: 8),
-                              const Text(
-                                'Nhập email đã đăng ký để nhận hướng dẫn khôi phục mật khẩu.',
+                              Text(
+                                'Enter registered email to receive password reset instructions.'.tr(context),
                                 textAlign: TextAlign.center,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   color: AppTheme.onSurfaceVariant,
                                   fontSize: 14,
                                 ),
@@ -141,11 +142,11 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const Padding(
-                                    padding: EdgeInsets.only(bottom: 8),
+                                  Padding(
+                                    padding: const EdgeInsets.only(bottom: 8),
                                     child: Text(
-                                      'Địa chỉ Email',
-                                      style: TextStyle(
+                                      'Email Address'.tr(context),
+                                      style: const TextStyle(
                                         color: AppTheme.onSurface,
                                         fontSize: 12,
                                         fontWeight: FontWeight.w500,
@@ -184,23 +185,26 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: AppTheme.primary,
                                   foregroundColor: Colors.white,
-                                  minimumSize: const Size.fromHeight(48),
+                                  minimumSize: Size.fromHeight(48),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(24),
                                   ),
                                 ),
                                 child: authVM.isLoading 
                                   ? const CircularProgressIndicator(color: Colors.white)
-                                  : const Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          'Gửi yêu cầu',
-                                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-                                        ),
-                                        SizedBox(width: 8),
-                                        Icon(Icons.send, size: 18),
-                                      ],
+                                  : Padding(
+                                      padding: const EdgeInsets.symmetric(vertical: 16),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            'Send Request'.tr(context),
+                                            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                                          ),
+                                          const SizedBox(width: 8),
+                                          const Icon(Icons.send, size: 18),
+                                        ],
+                                      ),
                                     ),
                               ),
                               const SizedBox(height: 16),
@@ -209,14 +213,14 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
                                 onPressed: () {
                                   Navigator.pop(context);
                                 },
-                                child: const Row(
+                                child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Icon(Icons.arrow_back, size: 18, color: AppTheme.primary),
-                                    SizedBox(width: 8),
+                                    const Icon(Icons.arrow_back, size: 18, color: AppTheme.primary),
+                                    const SizedBox(width: 8),
                                     Text(
-                                      'Quay lại Đăng nhập',
-                                      style: TextStyle(color: AppTheme.primary, fontWeight: FontWeight.bold),
+                                      'Back to Login'.tr(context),
+                                      style: const TextStyle(color: AppTheme.primary, fontWeight: FontWeight.bold),
                                     ),
                                   ],
                                 ),

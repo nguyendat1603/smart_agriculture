@@ -4,6 +4,7 @@ import '../theme/app_theme.dart';
 import '../viewmodels/auth_viewmodel.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
+import '../l10n/app_translations.dart';
 
 class EditProfileView extends StatefulWidget {
   const EditProfileView({super.key});
@@ -56,7 +57,7 @@ class _EditProfileViewState extends State<EditProfileView> {
         currentAvatarUrl: _avatarUrlController.text.trim(),
       );
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Lưu thông tin thành công')));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Profile saved successfully'.tr(context))));
         Navigator.pop(context);
       }
     } catch (e) {
@@ -76,9 +77,9 @@ class _EditProfileViewState extends State<EditProfileView> {
         backgroundColor: AppTheme.surface.withValues(alpha: 0.7),
         elevation: 0,
         centerTitle: true,
-        title: const Text(
-          'Chỉnh sửa hồ sơ',
-          style: TextStyle(
+        title: Text(
+          'Edit Profile'.tr(context),
+          style: const TextStyle(
             color: AppTheme.onSurface,
             fontSize: 20,
             fontWeight: FontWeight.bold,
@@ -153,9 +154,9 @@ class _EditProfileViewState extends State<EditProfileView> {
               ],
             ),
             const SizedBox(height: 16),
-            const Text(
-              'ẢNH ĐẠI DIỆN',
-              style: TextStyle(
+            Text(
+              'PROFILE PICTURE'.tr(context),
+              style: const TextStyle(
                 color: AppTheme.onSurfaceVariant,
                 fontSize: 12,
                 fontWeight: FontWeight.w500,
@@ -165,21 +166,21 @@ class _EditProfileViewState extends State<EditProfileView> {
             const SizedBox(height: 32),
 
             // Form
-            _buildTextField(label: 'Họ và tên', controller: _nameController, icon: Icons.person),
+            _buildTextField(label: 'Full Name'.tr(context), controller: _nameController, icon: Icons.person),
             const SizedBox(height: 16),
-            _buildTextField(label: 'Số điện thoại', controller: _phoneController, keyboardType: TextInputType.phone, icon: Icons.phone),
+            _buildTextField(label: 'Phone Number'.tr(context), controller: _phoneController, keyboardType: TextInputType.phone, icon: Icons.phone),
             const SizedBox(height: 16),
-            _buildTextField(label: 'Vị trí trang trại', controller: _locationController, icon: Icons.location_on),
+            _buildTextField(label: 'Farm Location'.tr(context), controller: _locationController, icon: Icons.location_on),
             const SizedBox(height: 16),
             // Email (Readonly)
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Padding(
-                  padding: EdgeInsets.only(left: 4, bottom: 8),
+                Padding(
+                  padding: const EdgeInsets.only(left: 4, bottom: 8),
                   child: Text(
-                    'Email (Không thể thay đổi)',
-                    style: TextStyle(color: AppTheme.onSurfaceVariant, fontSize: 12, fontWeight: FontWeight.w500),
+                    'Email (Cannot be changed)'.tr(context),
+                    style: const TextStyle(color: AppTheme.onSurfaceVariant, fontSize: 12, fontWeight: FontWeight.w500),
                   ),
                 ),
                 TextFormField(
@@ -213,7 +214,7 @@ class _EditProfileViewState extends State<EditProfileView> {
               ),
               child: context.watch<AuthViewModel>().isLoading 
                   ? const CircularProgressIndicator(color: Colors.white)
-                  : const Text('Lưu thay đổi', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                  : Text('Save Changes'.tr(context), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             ),
             const SizedBox(height: 32),
           ],

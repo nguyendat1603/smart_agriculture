@@ -6,9 +6,9 @@ import 'automation_view.dart';
 import 'sensors_view.dart';
 import 'settings_view.dart';
 import 'package:provider/provider.dart';
-import '../viewmodels/settings_viewmodel.dart';
 import '../viewmodels/automation_viewmodel.dart';
 import '../viewmodels/auth_viewmodel.dart';
+import '../l10n/app_translations.dart';
 
 class MainLayout extends StatefulWidget {
   const MainLayout({super.key});
@@ -78,10 +78,10 @@ class _MainLayoutState extends State<MainLayout> {
               selectedLabelStyle: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
               unselectedLabelStyle: const TextStyle(fontSize: 10),
               items: [
-                _buildNavItem(Icons.dashboard, context.watch<SettingsViewModel>().isEnglish ? "Dashboard" : "Tổng quan", 0),
-                _buildNavItem(Icons.sensors, context.watch<SettingsViewModel>().isEnglish ? "Sensors" : "Cảm biến", 1),
-                _buildNavItem(Icons.precision_manufacturing, context.watch<SettingsViewModel>().isEnglish ? "Automation" : "Tự động", 2),
-                _buildNavItem(Icons.settings, context.watch<SettingsViewModel>().isEnglish ? "Settings" : "Cài đặt", 3),
+                _buildNavItem(Icons.dashboard, "Dashboard".tr(context), 0),
+                _buildNavItem(Icons.sensors, "Sensors".tr(context), 1),
+                _buildNavItem(Icons.precision_manufacturing, "Automation".tr(context), 2),
+                _buildNavItem(Icons.settings, "Settings".tr(context), 3),
               ],
             ),
           ),

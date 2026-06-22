@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../theme/app_theme.dart';
 import '../viewmodels/automation_viewmodel.dart';
-import '../viewmodels/settings_viewmodel.dart';
 import '../viewmodels/auth_viewmodel.dart';
+import '../l10n/app_translations.dart';
 
 class AutomationView extends StatefulWidget {
   const AutomationView({super.key});
@@ -30,8 +30,6 @@ class _AutomationViewState extends State<AutomationView> {
   @override
   Widget build(BuildContext context) {
     final vm = context.watch<AutomationViewModel>();
-    final settingsVM = context.watch<SettingsViewModel>();
-    final isEn = settingsVM.isEnglish;
 
     return Scaffold(
       backgroundColor: AppTheme.background,
@@ -45,7 +43,7 @@ class _AutomationViewState extends State<AutomationView> {
           onPressed: () {},
         ),
         title: Text(
-          isEn ? "Automation Settings" : "Cài đặt Tự động",
+          "Automation Settings".tr(context),
           style: const TextStyle(color: AppTheme.primary, fontWeight: FontWeight.bold),
         ),
       ),
@@ -61,7 +59,7 @@ class _AutomationViewState extends State<AutomationView> {
         foregroundColor: AppTheme.onPrimary,
         icon: const Icon(Icons.add),
         label: Text(
-          _selectedTab == 0 ? (isEn ? "Add New Schedule" : "Thêm lịch trình mới") : (isEn ? "Add New Trigger" : "Thêm kích hoạt mới"),
+          _selectedTab == 0 ? "Add New Schedule".tr(context) : "Add New Trigger".tr(context),
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
       ),
@@ -93,7 +91,7 @@ class _AutomationViewState extends State<AutomationView> {
                             ] : null,
                           ),
                           alignment: Alignment.center,
-                          child: Text(isEn ? "Schedules" : "Lịch trình", style: TextStyle(color: _selectedTab == 0 ? AppTheme.primary : AppTheme.onSurfaceVariant, fontWeight: FontWeight.bold, fontSize: 12)),
+                          child: Text("Schedules".tr(context), style: TextStyle(color: _selectedTab == 0 ? AppTheme.primary : AppTheme.onSurfaceVariant, fontWeight: FontWeight.bold, fontSize: 12)),
                         ),
                       ),
                     ),
@@ -110,7 +108,7 @@ class _AutomationViewState extends State<AutomationView> {
                             ] : null,
                           ),
                           alignment: Alignment.center,
-                          child: Text(isEn ? "Triggers" : "Kích hoạt", style: TextStyle(color: _selectedTab == 1 ? AppTheme.primary : AppTheme.onSurfaceVariant, fontWeight: FontWeight.bold, fontSize: 12)),
+                          child: Text("Triggers".tr(context), style: TextStyle(color: _selectedTab == 1 ? AppTheme.primary : AppTheme.onSurfaceVariant, fontWeight: FontWeight.bold, fontSize: 12)),
                         ),
                       ),
                     ),
@@ -124,7 +122,7 @@ class _AutomationViewState extends State<AutomationView> {
                 const Center(child: CircularProgressIndicator())
               else if (_selectedTab == 0) ...[
                 // Schedules Section
-                Text(isEn ? "Active Schedules" : "Lịch trình đang hoạt động", style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: AppTheme.onSurface)),
+                Text("Active Schedules".tr(context), style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: AppTheme.onSurface)),
                 const SizedBox(height: 16),
                 
                 ...vm.schedules.asMap().entries.map((entry) {
@@ -141,7 +139,7 @@ class _AutomationViewState extends State<AutomationView> {
                       isOn: schedule.isEnabled,
                       onToggle: (val) { vm.toggleSchedule(idx); },
                       onDelete: () { vm.deleteSchedule(idx); },
-                      actionLabel: isEn ? "Trigger Time" : "Giờ kích hoạt",
+                      actionLabel: "Trigger Time".tr(context),
                       actionValue: schedule.time,
                     ),
                   );
@@ -150,7 +148,7 @@ class _AutomationViewState extends State<AutomationView> {
 
               if (_selectedTab == 1) ...[
                 // Triggers Section
-                Text(isEn ? "Sensor Triggers" : "Kích hoạt theo Cảm biến", style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: AppTheme.onSurface)),
+                Text("Sensor Triggers".tr(context), style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: AppTheme.onSurface)),
                 const SizedBox(height: 16),
 
                 ...vm.triggers.asMap().entries.map((entry) {
@@ -167,7 +165,7 @@ class _AutomationViewState extends State<AutomationView> {
                       isOn: trigger.isEnabled,
                       onToggle: (val) { vm.toggleTrigger(idx); },
                       onDelete: () { vm.deleteTrigger(idx); },
-                      actionLabel: isEn ? "Action" : "Hành động",
+                      actionLabel: "Action".tr(context),
                       actionValue: trigger.action,
                     ),
                   );
@@ -243,7 +241,7 @@ class _AutomationViewState extends State<AutomationView> {
                     IconButton(
                       icon: const Icon(Icons.delete_outline, color: Colors.redAccent),
                       onPressed: onDelete,
-                      tooltip: "Xóa",
+                      tooltip: "Delete".tr(context),
                       padding: EdgeInsets.zero,
                       constraints: const BoxConstraints(),
                     ),

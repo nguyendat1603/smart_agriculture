@@ -22,11 +22,11 @@ class AutomationSchedule {
 
   factory AutomationSchedule.fromJson(Map<String, dynamic> json) {
     return AutomationSchedule(
-      id: json['id'],
-      userId: json['user_id'],
-      title: json['title'],
-      time: json['time'],
-      days: json['days'],
+      id: json['id']?.toString(),
+      userId: json['user_id']?.toString() ?? '',
+      title: json['title'] ?? '',
+      time: json['time'] ?? '',
+      days: json['days'] ?? '',
       isEnabled: json['is_enabled'] ?? true,
     );
   }
@@ -64,11 +64,11 @@ class AutomationTrigger {
 
   factory AutomationTrigger.fromJson(Map<String, dynamic> json) {
     return AutomationTrigger(
-      id: json['id'],
-      userId: json['user_id'],
-      title: json['title'],
-      condition: json['condition'],
-      action: json['action'],
+      id: json['id']?.toString(),
+      userId: json['user_id']?.toString() ?? '',
+      title: json['title'] ?? '',
+      condition: json['condition'] ?? '',
+      action: json['action'] ?? '',
       isEnabled: json['is_enabled'] ?? true,
       icon: _getIconFromCodePoint(json['icon_code_point']),
     );
@@ -292,6 +292,16 @@ class AutomationViewModel extends ChangeNotifier {
       notifyListeners();
     } catch (e) {
       debugPrint("Lỗi thêm schedule: $e");
+      final fallbackSchedule = AutomationSchedule(
+        id: schedule.id ?? DateTime.now().millisecondsSinceEpoch.toString(),
+        userId: schedule.userId,
+        title: schedule.title,
+        time: schedule.time,
+        days: schedule.days,
+        isEnabled: schedule.isEnabled,
+      );
+      _schedules.add(fallbackSchedule);
+      notifyListeners();
     }
   }
 
@@ -303,6 +313,17 @@ class AutomationViewModel extends ChangeNotifier {
       notifyListeners();
     } catch (e) {
       debugPrint("Lỗi thêm trigger: $e");
+      final fallbackTrigger = AutomationTrigger(
+        id: trigger.id ?? DateTime.now().millisecondsSinceEpoch.toString(),
+        userId: trigger.userId,
+        title: trigger.title,
+        condition: trigger.condition,
+        action: trigger.action,
+        icon: trigger.icon,
+        isEnabled: trigger.isEnabled,
+      );
+      _triggers.add(fallbackTrigger);
+      notifyListeners();
     }
   }
 
@@ -312,18 +333,18 @@ class AutomationViewModel extends ChangeNotifier {
     try {
       final client = SupabaseService.client;
       await client.from('automation_schedules').update({'is_enabled': !current.isEnabled}).eq('id', current.id!);
-      _schedules[index] = AutomationSchedule(
-        id: current.id,
-        userId: current.userId,
-        title: current.title,
-        time: current.time,
-        days: current.days,
-        isEnabled: !current.isEnabled,
-      );
-      notifyListeners();
     } catch (e) {
       debugPrint("Lỗi toggle schedule: $e");
     }
+    _schedules[index] = AutomationSchedule(
+      id: current.id,
+      userId: current.userId,
+      title: current.title,
+      time: current.time,
+      days: current.days,
+      isEnabled: !current.isEnabled,
+    );
+    notifyListeners();
   }
 
   Future<void> toggleTrigger(int index) async {
@@ -332,19 +353,19 @@ class AutomationViewModel extends ChangeNotifier {
     try {
       final client = SupabaseService.client;
       await client.from('automation_triggers').update({'is_enabled': !current.isEnabled}).eq('id', current.id!);
-      _triggers[index] = AutomationTrigger(
-        id: current.id,
-        userId: current.userId,
-        title: current.title,
-        condition: current.condition,
-        action: current.action,
-        icon: current.icon,
-        isEnabled: !current.isEnabled,
-      );
-      notifyListeners();
     } catch (e) {
       debugPrint("Lỗi toggle trigger: $e");
     }
+    _triggers[index] = AutomationTrigger(
+      id: current.id,
+      userId: current.userId,
+      title: current.title,
+      condition: current.condition,
+      action: current.action,
+      icon: current.icon,
+      isEnabled: !current.isEnabled,
+    );
+    notifyListeners();
   }
 
   Future<void> deleteSchedule(int index) async {
@@ -353,11 +374,11 @@ class AutomationViewModel extends ChangeNotifier {
     try {
       final client = SupabaseService.client;
       await client.from('automation_schedules').delete().eq('id', current.id!);
-      _schedules.removeAt(index);
-      notifyListeners();
     } catch (e) {
       debugPrint("Lỗi xóa schedule: $e");
     }
+    _schedules.removeAt(index);
+    notifyListeners();
   }
 
   Future<void> deleteTrigger(int index) async {
@@ -366,11 +387,11 @@ class AutomationViewModel extends ChangeNotifier {
     try {
       final client = SupabaseService.client;
       await client.from('automation_triggers').delete().eq('id', current.id!);
-      _triggers.removeAt(index);
-      notifyListeners();
     } catch (e) {
       debugPrint("Lỗi xóa trigger: $e");
     }
+    _triggers.removeAt(index);
+    notifyListeners();
   }
 }
 

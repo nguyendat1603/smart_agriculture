@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../theme/app_theme.dart';
 import '../viewmodels/auth_viewmodel.dart';
+import '../l10n/app_translations.dart';
 
 class ChangePasswordView extends StatefulWidget {
   const ChangePasswordView({super.key});
@@ -25,17 +26,17 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
     final confirmPw = _confirmPasswordController.text;
 
     if (currentPw.isEmpty || newPw.isEmpty || confirmPw.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Vui lòng điền đủ thông tin')));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Please fill all fields'.tr(context))));
       return;
     }
 
     if (newPw != confirmPw) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Mật khẩu mới không khớp')));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('New password does not match'.tr(context))));
       return;
     }
 
     if (newPw.length < 6) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Mật khẩu mới phải có ít nhất 6 ký tự')));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('New password must be at least 6 characters'.tr(context))));
       return;
     }
 
@@ -43,7 +44,7 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
     try {
       await authVM.changePassword(currentPw, newPw);
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Đổi mật khẩu thành công!')));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Password changed successfully!'.tr(context))));
         Navigator.pop(context);
       }
     } catch (e) {
@@ -61,9 +62,9 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
         backgroundColor: AppTheme.surface.withValues(alpha: 0.7),
         elevation: 0,
         centerTitle: false,
-        title: const Text(
-          'Đổi mật khẩu',
-          style: TextStyle(
+        title: Text(
+          'Change Password'.tr(context),
+          style: const TextStyle(
             color: AppTheme.primary,
             fontSize: 24,
             fontWeight: FontWeight.bold,
@@ -96,15 +97,15 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
                           )
                         ],
                       ),
-                      child: const Row(
+                      child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Icon(Icons.info, color: AppTheme.primary, size: 20),
-                          SizedBox(width: 12),
+                          const Icon(Icons.info, color: AppTheme.primary, size: 20),
+                          const SizedBox(width: 12),
                           Expanded(
                             child: Text(
-                              'Mật khẩu mới của bạn phải có ít nhất 6 ký tự, bao gồm chữ cái và số.',
-                              style: TextStyle(
+                              'Your new password must be at least 6 characters, including letters and numbers.'.tr(context),
+                              style: const TextStyle(
                                 color: AppTheme.onSurfaceVariant,
                                 fontSize: 14,
                               ),
@@ -118,7 +119,7 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
                     // Current Password
                     _buildPasswordField(
                       controller: _currentPasswordController,
-                      label: 'Mật khẩu hiện tại',
+                      label: 'Current Password'.tr(context),
                       icon: Icons.lock,
                       obscureText: _obscureCurrent,
                       onToggleVisibility: () {
@@ -133,7 +134,7 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
                     // New Password
                     _buildPasswordField(
                       controller: _newPasswordController,
-                      label: 'Mật khẩu mới',
+                      label: 'New Password'.tr(context),
                       icon: Icons.lock_reset,
                       iconColor: AppTheme.primary,
                       obscureText: _obscureNew,
@@ -148,7 +149,7 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
                     // Confirm Password
                     _buildPasswordField(
                       controller: _confirmPasswordController,
-                      label: 'Xác nhận mật khẩu mới',
+                      label: 'Confirm New Password'.tr(context),
                       icon: Icons.check_circle,
                       iconColor: AppTheme.primary,
                       obscureText: _obscureConfirm,
@@ -191,15 +192,15 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
                 ),
                 child: context.watch<AuthViewModel>().isLoading
                     ? const CircularProgressIndicator(color: Colors.white) 
-                    : const Row(
+                    : Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            'Cập nhật mật khẩu',
-                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                            'Update Password'.tr(context),
+                            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                           ),
-                          SizedBox(width: 8),
-                          Icon(Icons.save),
+                          const SizedBox(width: 8),
+                          const Icon(Icons.save),
                         ],
                       ),
               ),

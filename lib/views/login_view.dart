@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'dart:ui';
 import '../theme/app_theme.dart';
 import '../viewmodels/auth_viewmodel.dart';
+import '../l10n/app_translations.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -22,7 +23,7 @@ class _LoginViewState extends State<LoginView> {
     final password = _passwordController.text;
 
     if (email.isEmpty || password.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Vui lòng nhập email và mật khẩu')));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Please enter email and password'.tr(context))));
       return;
     }
 
@@ -143,9 +144,9 @@ class _LoginViewState extends State<LoginView> {
                             ),
                           ),
                           const SizedBox(height: 8),
-                          const Text(
-                            'Chào mừng bạn quay lại',
-                            style: TextStyle(
+                          Text(
+                            'Welcome Back'.tr(context),
+                            style: const TextStyle(
                               color: AppTheme.onSurfaceVariant,
                               fontSize: 16,
                             ),
@@ -155,7 +156,7 @@ class _LoginViewState extends State<LoginView> {
                           // Form
                           _buildTextField(
                             controller: _emailController,
-                            label: 'Email',
+                            label: 'Email'.tr(context),
                             hint: 'nguyen.van.a@example.com',
                             icon: Icons.mail,
                           ),
@@ -167,9 +168,9 @@ class _LoginViewState extends State<LoginView> {
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  const Text(
-                                    'Mật khẩu',
-                                    style: TextStyle(
+                                  Text(
+                                    'Password'.tr(context),
+                                    style: const TextStyle(
                                       color: AppTheme.onSurface,
                                       fontSize: 12,
                                       fontWeight: FontWeight.w500,
@@ -184,9 +185,9 @@ class _LoginViewState extends State<LoginView> {
                                       minimumSize: const Size(50, 20),
                                       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                                     ),
-                                    child: const Text(
-                                      'Quên mật khẩu?',
-                                      style: TextStyle(color: AppTheme.primary, fontSize: 12),
+                                    child: Text(
+                                      'Forgot Password?'.tr(context),
+                                      style: const TextStyle(color: AppTheme.primary, fontSize: 12),
                                     ),
                                   ),
                                 ],
@@ -242,15 +243,15 @@ class _LoginViewState extends State<LoginView> {
                             ),
                             child: authVM.isLoading 
                               ? const CircularProgressIndicator(color: Colors.white)
-                              : const Row(
+                              : Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      'Đăng nhập',
-                                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                                      'Login'.tr(context),
+                                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                                     ),
-                                    SizedBox(width: 8),
-                                    Icon(Icons.arrow_forward, size: 20),
+                                    const SizedBox(width: 8),
+                                    const Icon(Icons.arrow_forward, size: 20),
                                   ],
                                 ),
                           ),
@@ -259,17 +260,17 @@ class _LoginViewState extends State<LoginView> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              const Text(
-                                'Chưa có tài khoản? ',
-                                style: TextStyle(color: AppTheme.onSurfaceVariant),
+                              Text(
+                                '${'No account?'.tr(context)} ',
+                                style: const TextStyle(color: AppTheme.onSurfaceVariant),
                               ),
                               GestureDetector(
                                 onTap: () {
                                   Navigator.pushNamed(context, '/register');
                                 },
-                                child: const Text(
-                                  'Đăng ký ngay',
-                                  style: TextStyle(
+                                child: Text(
+                                  'Register Now'.tr(context),
+                                  style: const TextStyle(
                                     color: AppTheme.primary,
                                     fontWeight: FontWeight.bold,
                                   ),

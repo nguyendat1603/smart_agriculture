@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../viewmodels/sensor_viewmodel.dart';
 import '../viewmodels/settings_viewmodel.dart';
 import '../theme/app_theme.dart';
+import '../l10n/app_translations.dart';
 
 class DashboardView extends StatelessWidget {
   const DashboardView({super.key});
@@ -169,9 +170,9 @@ class DashboardView extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(settingsVM.isEnglish ? "Live Sensor Data" : "Dữ liệu Cảm biến", style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: AppTheme.onSurface)),
+                Text("Live Sensor Data".tr(context), style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: AppTheme.onSurface)),
                 const SizedBox(height: 4),
-                Text(settingsVM.isEnglish ? "Real-time monitoring across all field zones." : "Giám sát thời gian thực toàn bộ khu vực.", style: const TextStyle(fontSize: 14, color: AppTheme.onSurfaceVariant)),
+                Text("Real-time monitoring across all field zones.".tr(context), style: const TextStyle(fontSize: 14, color: AppTheme.onSurfaceVariant)),
               ],
             ),
             Container(
@@ -237,7 +238,7 @@ class DashboardView extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        settingsVM.isEnglish ? "AI Health Analysis" : "Phân tích Sức khỏe AI",
+                        "AI Health Analysis".tr(context),
                         style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -246,7 +247,7 @@ class DashboardView extends StatelessWidget {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        settingsVM.isEnglish ? "Scan plant images for diseases" : "Quét hình ảnh để chẩn đoán bệnh cây",
+                        "Scan plant images for diseases".tr(context),
                         style: TextStyle(
                           fontSize: 13,
                           color: Colors.white.withValues(alpha: 0.8),
@@ -265,13 +266,13 @@ class DashboardView extends StatelessWidget {
         _buildSensorCard(
           icon: Icons.water_drop,
           iconColor: AppTheme.secondary,
-          title: settingsVM.isEnglish ? "Air Humidity" : "Độ ẩm không khí",
-          subtitle: settingsVM.isEnglish ? "Optimal: 60-70%" : "Tối ưu: 60-70%",
-          statusText: vm.doAmKhongKhi >= 60 && vm.doAmKhongKhi <= 70 ? (settingsVM.isEnglish ? "Healthy" : "Bình thường") : (settingsVM.isEnglish ? "Warning" : "Cảnh báo"),
+          title: "Air Humidity".tr(context),
+          subtitle: "Optimal: 60-70%".tr(context),
+          statusText: vm.doAmKhongKhi >= 60 && vm.doAmKhongKhi <= 70 ? "Healthy".tr(context) : "Warning".tr(context),
           statusColor: vm.doAmKhongKhi >= 60 && vm.doAmKhongKhi <= 70 ? AppTheme.secondary : AppTheme.error,
           value: vm.doAmKhongKhi.toStringAsFixed(1),
           unit: "%",
-          trendStr: settingsVM.isEnglish ? "Dynamic Realtime" : "Thời gian thực",
+          trendStr: "Dynamic Realtime".tr(context),
           trendIcon: Icons.show_chart,
           chartSpots: airHumidSpots,
         ),
@@ -279,13 +280,13 @@ class DashboardView extends StatelessWidget {
         _buildSensorCard(
           icon: Icons.thermostat,
           iconColor: AppTheme.error,
-          title: settingsVM.isEnglish ? "Temperature" : "Nhiệt độ",
-          subtitle: settingsVM.isEnglish ? "Optimal: 22-26°C" : "Tối ưu: 22-26°C",
-          statusText: vm.nhietDo > 26 ? (settingsVM.isEnglish ? "Elevated" : "Nóng") : (vm.nhietDo < 22 ? (settingsVM.isEnglish ? "Cold" : "Lạnh") : (settingsVM.isEnglish ? "Optimal" : "Tối ưu")),
+          title: "Temperature".tr(context),
+          subtitle: "Optimal: 22-26°C".tr(context),
+          statusText: vm.nhietDo > 26 ? "Elevated".tr(context) : (vm.nhietDo < 22 ? "Cold".tr(context) : "Optimal".tr(context)),
           statusColor: vm.nhietDo > 26 ? AppTheme.error : AppTheme.tertiary,
           value: settingsVM.formatTemperature(vm.nhietDo).replaceAll(RegExp(r'°[CFK]'), ''),
           unit: "°${settingsVM.tempUnit}",
-          trendStr: settingsVM.isEnglish ? "Dynamic Realtime" : "Thời gian thực",
+          trendStr: "Dynamic Realtime".tr(context),
           trendIcon: Icons.show_chart,
           chartSpots: tempSpots,
         ),
@@ -293,13 +294,13 @@ class DashboardView extends StatelessWidget {
         _buildSensorCard(
           icon: Icons.grass,
           iconColor: AppTheme.primaryContainer,
-          title: settingsVM.isEnglish ? "Soil Moisture" : "Độ ẩm đất",
-          subtitle: settingsVM.isEnglish ? "Optimal: 40-50%" : "Tối ưu: 40-50%",
-          statusText: vm.doAmDat < 40 ? (settingsVM.isEnglish ? "Dry" : "Khô") : (settingsVM.isEnglish ? "Healthy" : "Bình thường"),
+          title: "Soil Moisture".tr(context),
+          subtitle: "Optimal: 40-50%".tr(context),
+          statusText: vm.doAmDat < 40 ? "Dry".tr(context) : "Healthy".tr(context),
           statusColor: vm.doAmDat < 40 ? Colors.orange : AppTheme.primary,
           value: vm.doAmDat.toStringAsFixed(1),
           unit: "%",
-          trendStr: settingsVM.isEnglish ? "Dynamic Realtime" : "Thời gian thực",
+          trendStr: "Dynamic Realtime".tr(context),
           trendIcon: Icons.show_chart,
           chartSpots: soilHumidSpots,
         ),
@@ -307,13 +308,13 @@ class DashboardView extends StatelessWidget {
         _buildSensorCard(
           icon: Icons.waves,
           iconColor: Colors.blue.shade700,
-          title: settingsVM.isEnglish ? "Water Tank Level" : "Mực nước bồn",
-          subtitle: settingsVM.isEnglish ? "Capacity: 10,000L" : "Sức chứa: 10,000L",
-          statusText: vm.mucNuoc < 20 ? (settingsVM.isEnglish ? "Low Level" : "Sắp cạn") : (settingsVM.isEnglish ? "Normal" : "Bình thường"),
+          title: "Water Tank Level".tr(context),
+          subtitle: "Capacity: 10,000L".tr(context),
+          statusText: vm.mucNuoc < 20 ? "Low Level".tr(context) : "Normal".tr(context),
           statusColor: vm.mucNuoc < 20 ? AppTheme.error : Colors.blue.shade700,
           value: vm.mucNuoc.toStringAsFixed(1),
           unit: "%",
-          trendStr: settingsVM.isEnglish ? "Dynamic Realtime" : "Thời gian thực",
+          trendStr: "Dynamic Realtime".tr(context),
           trendIcon: Icons.show_chart,
           chartSpots: waterLevelSpots,
         ),
@@ -321,13 +322,13 @@ class DashboardView extends StatelessWidget {
         _buildSensorCard(
           icon: Icons.water_drop_outlined,
           iconColor: Colors.indigo,
-          title: settingsVM.isEnglish ? "Rain Sensor" : "Cảm biến mưa",
-          subtitle: settingsVM.isEnglish ? "Rain: >10%" : "Mưa: >10%",
-          statusText: vm.doAmMua > 10 ? (settingsVM.isEnglish ? "Raining" : "Đang mưa") : (settingsVM.isEnglish ? "Clear" : "Trời tạnh"),
+          title: "Rain Sensor".tr(context),
+          subtitle: "Rain: >10%".tr(context),
+          statusText: vm.doAmMua > 10 ? "Raining".tr(context) : "Clear".tr(context),
           statusColor: vm.doAmMua > 10 ? Colors.indigo : AppTheme.onSurfaceVariant,
           value: vm.doAmMua.toStringAsFixed(1),
           unit: "%",
-          trendStr: settingsVM.isEnglish ? "Dynamic Realtime" : "Thời gian thực",
+          trendStr: "Dynamic Realtime".tr(context),
           trendIcon: Icons.show_chart,
           chartSpots: rainSpots,
         ),

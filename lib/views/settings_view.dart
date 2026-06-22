@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../theme/app_theme.dart';
 import '../viewmodels/auth_viewmodel.dart';
 import '../viewmodels/settings_viewmodel.dart';
+import '../l10n/app_translations.dart';
 
 class SettingsView extends StatefulWidget {
   const SettingsView({super.key});
@@ -18,8 +19,6 @@ class _SettingsViewState extends State<SettingsView> {
     final authVM = context.watch<AuthViewModel>();
     final settingsVM = context.watch<SettingsViewModel>();
     final user = authVM.currentUser;
-    final isEnglish = settingsVM.isEnglish;
-    
     return Scaffold(
       backgroundColor: AppTheme.background,
       appBar: AppBar(
@@ -27,7 +26,7 @@ class _SettingsViewState extends State<SettingsView> {
         elevation: 0,
         centerTitle: true,
         title: Text(
-          isEnglish ? 'Settings' : 'Cài đặt',
+          'Settings'.tr(context),
           style: const TextStyle(
             color: AppTheme.primary,
             fontSize: 20,
@@ -105,13 +104,13 @@ class _SettingsViewState extends State<SettingsView> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        user?.fullName ?? (isEnglish ? 'User' : 'Người dùng'),
+                        user?.fullName ?? 'User'.tr(context),
                         style: theme.textTheme.titleMedium?.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       Text(
-                        user?.role ?? (isEnglish ? 'Unknown' : 'Chưa xác định'),
+                        user?.role ?? 'Unknown'.tr(context),
                         style: theme.textTheme.bodySmall,
                       ),
                     ],
@@ -132,18 +131,18 @@ class _SettingsViewState extends State<SettingsView> {
           const SizedBox(height: 24),
           
           // TÀI KHOẢN
-          _buildSectionHeader(isEnglish ? 'ACCOUNT' : 'TÀI KHOẢN'),
+          _buildSectionHeader('ACCOUNT'.tr(context)),
           _buildSettingsGroup([
             _buildSettingsItem(
               icon: Icons.person,
-              title: isEnglish ? 'Personal Information' : 'Thông tin cá nhân',
+              title: 'Personal Information'.tr(context),
               onTap: () {
                 Navigator.pushNamed(context, '/edit_profile');
               },
             ),
             _buildSettingsItem(
               icon: Icons.lock,
-              title: isEnglish ? 'Security & Password' : 'Bảo mật & Mật khẩu',
+              title: 'Security & Password'.tr(context),
               onTap: () {
                 Navigator.pushNamed(context, '/change_password');
               },
@@ -153,16 +152,16 @@ class _SettingsViewState extends State<SettingsView> {
           const SizedBox(height: 24),
           
           // THÔNG BÁO
-          _buildSectionHeader(isEnglish ? 'NOTIFICATIONS' : 'THÔNG BÁO'),
+          _buildSectionHeader('NOTIFICATIONS'.tr(context)),
           _buildSettingsGroup([
             _buildSettingsItem(
               icon: Icons.notifications_active,
-              title: isEnglish ? 'Sensor Alerts' : 'Cảnh báo cảm biến',
+              title: 'Sensor Alerts'.tr(context),
               onTap: () {},
             ),
             _buildSettingsItem(
               icon: Icons.info,
-              title: isEnglish ? 'System Notifications' : 'Thông báo hệ thống',
+              title: 'System Notifications'.tr(context),
               onTap: () {},
             ),
           ]),
@@ -170,47 +169,28 @@ class _SettingsViewState extends State<SettingsView> {
           const SizedBox(height: 24),
           
           // TÙY CHỈNH
-          _buildSectionHeader(isEnglish ? 'PREFERENCES' : 'TÙY CHỈNH'),
+          _buildSectionHeader('PREFERENCES'.tr(context)),
           _buildSettingsGroup([
             _buildSettingsItemWithWidget(
               icon: Icons.translate,
-              title: isEnglish ? 'Language' : 'Ngôn ngữ',
-              trailing: GestureDetector(
-                onTap: () {
-                  settingsVM.toggleLanguage();
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: AppTheme.surfaceContainer,
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                        decoration: BoxDecoration(
-                          color: !isEnglish ? AppTheme.primary : Colors.transparent,
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        child: Text('VN', style: TextStyle(color: !isEnglish ? Colors.white : AppTheme.onSurfaceVariant, fontSize: 10, fontWeight: FontWeight.bold)),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                        decoration: BoxDecoration(
-                          color: isEnglish ? AppTheme.primary : Colors.transparent,
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        child: Text('EN', style: TextStyle(color: isEnglish ? Colors.white : AppTheme.onSurfaceVariant, fontSize: 10, fontWeight: FontWeight.bold)),
-                      ),
-                    ],
-                  ),
+              title: 'Language'.tr(context),
+              trailing: DropdownButtonHideUnderline(
+                child: DropdownButton<String>(
+                  value: settingsVM.currentLanguage,
+                  items: const [
+                    DropdownMenuItem(value: 'vi', child: Text('Tiếng Việt', style: TextStyle(color: AppTheme.primary, fontSize: 14, fontWeight: FontWeight.w500))),
+                    DropdownMenuItem(value: 'ja', child: Text('日本語 (Nhật)', style: TextStyle(color: AppTheme.primary, fontSize: 14, fontWeight: FontWeight.w500))),
+                  ],
+                  onChanged: (val) {
+                    if (val != null) settingsVM.setLanguage(val);
+                  },
+                  icon: const Icon(Icons.expand_more, color: AppTheme.primary, size: 16),
                 ),
               ),
             ),
             _buildSettingsItemWithWidget(
               icon: Icons.thermostat,
-              title: isEnglish ? 'Measurement Unit' : 'Đơn vị đo lường',
+              title: 'Measurement Unit'.tr(context),
               trailing: DropdownButtonHideUnderline(
                 child: DropdownButton<String>(
                   value: settingsVM.tempUnit,
@@ -231,21 +211,21 @@ class _SettingsViewState extends State<SettingsView> {
           const SizedBox(height: 24),
           
           // HỖ TRỢ
-          _buildSectionHeader(isEnglish ? 'SUPPORT' : 'HỖ TRỢ'),
+          _buildSectionHeader('SUPPORT'.tr(context)),
           _buildSettingsGroup([
             _buildSettingsItem(
               icon: Icons.help,
-              title: isEnglish ? 'Help Center' : 'Trung tâm trợ giúp',
+              title: 'Help Center'.tr(context),
               onTap: () {},
             ),
             _buildSettingsItem(
               icon: Icons.support_agent,
-              title: isEnglish ? 'Contact Technical Support' : 'Liên hệ hỗ trợ kỹ thuật',
+              title: 'Contact Technical Support'.tr(context),
               onTap: () {},
             ),
             _buildSettingsItem(
               icon: Icons.policy,
-              title: isEnglish ? 'Terms & Policies' : 'Điều khoản & Chính sách',
+              title: 'Terms & Policies'.tr(context),
               onTap: () {},
             ),
           ]),
@@ -259,7 +239,7 @@ class _SettingsViewState extends State<SettingsView> {
             },
             icon: const Icon(Icons.logout, color: AppTheme.error),
             label: Text(
-              isEnglish ? 'Log Out' : 'Đăng xuất',
+              'Log Out'.tr(context),
               style: const TextStyle(color: AppTheme.error, fontSize: 16, fontWeight: FontWeight.bold),
             ),
             style: OutlinedButton.styleFrom(

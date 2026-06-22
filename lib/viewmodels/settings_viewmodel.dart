@@ -1,14 +1,22 @@
 import 'package:flutter/material.dart';
 
 class SettingsViewModel extends ChangeNotifier {
-  bool _isEnglish = false;
+  String _currentLanguage = 'vi'; // 'vi', 'ja'
   String _tempUnit = 'C'; // 'C', 'F', 'K'
 
-  bool get isEnglish => _isEnglish;
+  String get currentLanguage => _currentLanguage;
+  bool get isEnglish => _currentLanguage == 'ja'; // Fallback temporary
   String get tempUnit => _tempUnit;
 
+  void setLanguage(String langCode) {
+    if (['vi', 'ja'].contains(langCode)) {
+      _currentLanguage = langCode;
+      notifyListeners();
+    }
+  }
+
   void toggleLanguage() {
-    _isEnglish = !_isEnglish;
+    _currentLanguage = _currentLanguage == 'vi' ? 'ja' : 'vi';
     notifyListeners();
   }
 

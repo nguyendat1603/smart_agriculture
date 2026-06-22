@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 import 'dart:ui';
 import '../theme/app_theme.dart';
 import '../viewmodels/auth_viewmodel.dart';
+import '../l10n/app_translations.dart';
+import '../viewmodels/settings_viewmodel.dart';
 
 class OtpView extends StatefulWidget {
   const OtpView({super.key});
@@ -19,14 +21,14 @@ class _OtpViewState extends State<OtpView> {
     final code = _otpController.text.trim();
 
     if (code.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Vui lòng nhập mã OTP')));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Please enter OTP'.tr(context))));
       return;
     }
 
     try {
       await authVM.verifyOtp(code);
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Kích hoạt thành công! Vui lòng đăng nhập.')));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Activation successful! Please login.'.tr(context))));
         Navigator.pushReplacementNamed(context, '/login');
       }
     } catch (e) {
@@ -96,9 +98,9 @@ class _OtpViewState extends State<OtpView> {
                             ),
                           ),
                           const SizedBox(height: 24),
-                          const Text(
-                            'Xác thực OTP',
-                            style: TextStyle(
+                          Text(
+                            'OTP Verification'.tr(context),
+                            style: const TextStyle(
                               color: AppTheme.onSurface,
                               fontSize: 24,
                               fontWeight: FontWeight.bold,
@@ -106,7 +108,9 @@ class _OtpViewState extends State<OtpView> {
                           ),
                           const SizedBox(height: 8),
                           Text(
-                            'Nhập mã 6 số được gửi đến email ${authVM.currentUserEmail ?? ""}',
+                            context.read<SettingsViewModel>().isEnglish 
+                                ? '${'Enter 6-digit code sent to email'.tr(context)} ${authVM.currentUserEmail ?? ""}' 
+                                : '${authVM.currentUserEmail ?? ""} ${'Enter 6-digit code sent to email'.tr(context)}',
                             textAlign: TextAlign.center,
                             style: const TextStyle(
                               color: AppTheme.onSurfaceVariant,
@@ -154,15 +158,15 @@ class _OtpViewState extends State<OtpView> {
                             ),
                             child: authVM.isLoading 
                               ? const CircularProgressIndicator(color: Colors.white)
-                              : const Row(
+                              : Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      'Xác thực',
-                                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                                      'Verify'.tr(context),
+                                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                                     ),
-                                    SizedBox(width: 8),
-                                    Icon(Icons.check_circle, size: 20),
+                                    const SizedBox(width: 8),
+                                    const Icon(Icons.check_circle, size: 20),
                                   ],
                                 ),
                           ),
@@ -171,7 +175,7 @@ class _OtpViewState extends State<OtpView> {
                             onPressed: () {
                               Navigator.pop(context); // Go back to register
                             },
-                            child: const Text('Quay lại đăng ký'),
+                            child: Text('Back to Register'.tr(context)),
                           )
                         ],
                       ),

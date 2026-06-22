@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'dart:math' as math;
 import '../viewmodels/sensor_viewmodel.dart';
 import '../theme/app_theme.dart';
-import '../viewmodels/settings_viewmodel.dart';
+import '../l10n/app_translations.dart';
 
 class SensorsView extends StatelessWidget {
   const SensorsView({super.key});
@@ -11,9 +11,6 @@ class SensorsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final vm = Provider.of<SensorViewModel>(context);
-
-    final settingsVM = Provider.of<SettingsViewModel>(context);
-    final isEn = settingsVM.isEnglish;
 
     return ListView(
       padding: const EdgeInsets.all(16),
@@ -26,8 +23,8 @@ class SensorsView extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(isEn ? "Device Connection" : "Kết nối Thiết bị", style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: AppTheme.onSurface)),
-                  Text(isEn ? "Manage and monitor your agricultural IoT network." : "Quản lý và theo dõi mạng IoT nông nghiệp của bạn.", style: const TextStyle(fontSize: 14, color: AppTheme.onSurfaceVariant)),
+                  Text("Device Connection".tr(context), style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: AppTheme.onSurface)),
+                  Text("Manage and monitor your agricultural IoT network.".tr(context), style: const TextStyle(fontSize: 14, color: AppTheme.onSurfaceVariant)),
                 ],
               ),
             ),
@@ -39,7 +36,7 @@ class SensorsView extends StatelessWidget {
             ElevatedButton.icon(
               onPressed: () {},
               icon: const Icon(Icons.sync, size: 18),
-              label: Text(isEn ? "Scan" : "Quét"),
+              label: Text("Scan".tr(context)),
               style: ElevatedButton.styleFrom(
                 foregroundColor: AppTheme.primary,
                 backgroundColor: AppTheme.surface,
@@ -50,7 +47,7 @@ class SensorsView extends StatelessWidget {
             ElevatedButton.icon(
               onPressed: () {},
               icon: const Icon(Icons.add, size: 18),
-              label: Text(isEn ? "Add" : "Thêm"),
+              label: Text("Add".tr(context)),
               style: ElevatedButton.styleFrom(
                 foregroundColor: AppTheme.onPrimary,
                 backgroundColor: AppTheme.primary,
@@ -79,7 +76,7 @@ class SensorsView extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(isEn ? "Main Reservoir" : "Bồn chứa chính", style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppTheme.onSurface)),
+                      Text("Main Reservoir".tr(context), style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppTheme.onSurface)),
                       Container(
                         margin: const EdgeInsets.only(top: 4),
                         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
@@ -87,7 +84,7 @@ class SensorsView extends StatelessWidget {
                           color: AppTheme.errorContainer,
                           borderRadius: BorderRadius.circular(12),
                         ),
-                        child: Text(isEn ? "Critical Level" : "Mức nguy hiểm", style: const TextStyle(fontSize: 12, color: AppTheme.error)),
+                        child: Text("Critical Level".tr(context), style: const TextStyle(fontSize: 12, color: AppTheme.error)),
                       ),
                     ],
                   ),
@@ -107,7 +104,7 @@ class SensorsView extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text("${vm.mucNuoc.toInt()}%", style: const TextStyle(fontSize: 36, fontWeight: FontWeight.bold, color: AppTheme.error)),
-                        Text(isEn ? "VOLUME" : "THỂ TÍCH", style: const TextStyle(fontSize: 12, color: AppTheme.onSurfaceVariant, fontWeight: FontWeight.w600)),
+                        Text("VOLUME".tr(context), style: const TextStyle(fontSize: 12, color: AppTheme.onSurfaceVariant, fontWeight: FontWeight.w600)),
                       ],
                     ),
                   ),
@@ -122,13 +119,13 @@ class SensorsView extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(isEn ? "Pump Status" : "Trạng thái Bơm", style: const TextStyle(fontSize: 12, color: AppTheme.onSurfaceVariant)),
+                      Text("Pump Status".tr(context), style: const TextStyle(fontSize: 12, color: AppTheme.onSurfaceVariant)),
                       const SizedBox(height: 4),
                       Row(
                         children: [
                           Container(width: 8, height: 8, decoration: BoxDecoration(color: vm.isPumpOn ? AppTheme.primary : AppTheme.outline, shape: BoxShape.circle)),
                           const SizedBox(width: 8),
-                          Text(vm.isPumpOn ? (isEn ? "Running" : "Đang chạy") : (isEn ? "Stopped" : "Đã dừng"), style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: AppTheme.onSurface)),
+                          Text(vm.isPumpOn ? "Running".tr(context) : "Stopped".tr(context), style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: AppTheme.onSurface)),
                         ],
                       ),
                     ],
@@ -136,7 +133,7 @@ class SensorsView extends StatelessWidget {
                   ElevatedButton.icon(
                     onPressed: () => vm.togglePump(),
                     icon: const Icon(Icons.power_settings_new),
-                    label: Text(vm.isPumpOn ? (isEn ? "Stop" : "Tắt") : (isEn ? "Start" : "Bật")),
+                    label: Text(vm.isPumpOn ? "Stop".tr(context) : "Start".tr(context)),
                     style: ElevatedButton.styleFrom(
                       foregroundColor: vm.isPumpOn ? AppTheme.onError : AppTheme.onPrimary,
                       backgroundColor: vm.isPumpOn ? AppTheme.error : AppTheme.primary,
@@ -154,7 +151,7 @@ class SensorsView extends StatelessWidget {
           children: [
             const Icon(Icons.router, color: AppTheme.onSurface),
             const SizedBox(width: 8),
-            Text(isEn ? "Active Network" : "Mạng hoạt động", style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppTheme.onSurface)),
+            Text("Active Network".tr(context), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppTheme.onSurface)),
           ],
         ),
         const SizedBox(height: 12),
@@ -162,37 +159,37 @@ class SensorsView extends StatelessWidget {
         _buildDeviceRow(
           icon: Icons.hub,
           iconColor: AppTheme.primary,
-          title: isEn ? "Field Gateway Alpha" : "Cổng kết nối Alpha",
-          subtitle: isEn ? "Online • 192.168.1.10" : "Đang kết nối • 192.168.1.10",
-          rightTop: isEn ? "Signal 98%" : "Tín hiệu 98%",
-          rightBottom: isEn ? "Uptime: 45d" : "H.động: 45 ngày",
+          title: "Field Gateway Alpha".tr(context),
+          subtitle: "Online • 192.168.1.10".tr(context),
+          rightTop: "Signal 98%".tr(context),
+          rightBottom: "Uptime: 45d".tr(context),
           isWarning: false,
         ),
         _buildDeviceRow(
           icon: Icons.grass,
           iconColor: AppTheme.tertiary,
-          title: isEn ? "Soil Probe - Zone B" : "Cảm biến đất - Khu B",
+          title: "Soil Probe - Zone B".tr(context),
           subtitle: "Online • LoRaWAN",
-          rightTop: isEn ? "Battery 82%" : "Pin 82%",
-          rightBottom: isEn ? "Sync: 2m ago" : "Đ.bộ: 2p trước",
+          rightTop: "Battery 82%".tr(context),
+          rightBottom: "Sync: 2m ago".tr(context),
           isWarning: false,
         ),
         _buildDeviceRow(
           icon: Icons.cloud,
           iconColor: AppTheme.secondary,
-          title: isEn ? "Microclimate Station 1" : "Trạm khí hậu 1",
+          title: "Microclimate Station 1".tr(context),
           subtitle: "Online • WiFi",
-          rightTop: isEn ? "Charging" : "Đang sạc",
-          rightBottom: isEn ? "Sync: Just now" : "Đ.bộ: Vừa xong",
+          rightTop: "Charging".tr(context),
+          rightBottom: "Sync: Just now".tr(context),
           isWarning: false,
         ),
         _buildDeviceRow(
           icon: Icons.water,
           iconColor: AppTheme.error,
-          title: isEn ? "Valve Controller C" : "Van điều khiển C",
-          subtitle: isEn ? "Connection Lost" : "Mất kết nối",
-          rightTop: isEn ? "Troubleshoot" : "Sửa lỗi",
-          rightBottom: isEn ? "Last seen: 1h ago" : "H.động: 1h trước",
+          title: "Valve Controller C".tr(context),
+          subtitle: "Connection Lost".tr(context),
+          rightTop: "Troubleshoot".tr(context),
+          rightBottom: "Last seen: 1h ago".tr(context),
           isWarning: true,
         ),
       ],

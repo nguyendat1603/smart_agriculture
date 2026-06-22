@@ -4,7 +4,9 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import '../theme/app_theme.dart';
 import '../viewmodels/health_analysis_viewmodel.dart';
+import '../viewmodels/settings_viewmodel.dart';
 import '../services/ai_analysis_service.dart';
+import '../l10n/app_translations.dart';
 
 class HealthAnalysisView extends StatefulWidget {
   const HealthAnalysisView({super.key});
@@ -38,21 +40,22 @@ class _HealthAnalysisViewState extends State<HealthAnalysisView> with SingleTick
 
   Future<void> _pickImage(BuildContext context) async {
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-    if (image != null && mounted) {
-      final viewModel = context.read<HealthAnalysisViewModel>();
-      viewModel.setImage(File(image.path));
-      
-      _scanAnimationController.repeat();
-      await viewModel.analyzeImage();
-      _scanAnimationController.stop();
-      _scanAnimationController.reset();
-    }
+    if (image == null || !context.mounted) return;
+
+    final viewModel = context.read<HealthAnalysisViewModel>();
+    viewModel.setImage(File(image.path));
+    
+    _scanAnimationController.repeat();
+    await viewModel.analyzeImage();
+    if (!mounted) return;
+    _scanAnimationController.stop();
+    _scanAnimationController.reset();
   }
 
   void _saveReport() {
-    // TODO: Connect to backend to save report (e.g. Supabase)
+    // Ghi chú: Kết nối với backend để lưu báo cáo (vd: Supabase)
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Đã lưu báo cáo thành công!')),
+      SnackBar(content: Text('Report saved successfully!'.tr(context))),
     );
   }
 
@@ -68,9 +71,9 @@ class _HealthAnalysisViewState extends State<HealthAnalysisView> with SingleTick
           icon: const Icon(Icons.arrow_back, color: AppTheme.primary),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text(
-          "AgriPulse AI",
-          style: TextStyle(
+        title: Text(
+          "AgriPulse AI".tr(context),
+          style: const TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
             color: AppTheme.primary,
@@ -85,18 +88,18 @@ class _HealthAnalysisViewState extends State<HealthAnalysisView> with SingleTick
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  "Phân tích Sức khỏe",
-                  style: TextStyle(
+                Text(
+                  "Health Analysis".tr(context),
+                  style: const TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.w600,
                     color: AppTheme.onBackground,
                   ),
                 ),
                 const SizedBox(height: 4),
-                const Text(
-                  "Chi tiết phân tích hình ảnh AI tự động",
-                  style: TextStyle(
+                Text(
+                  "AI automated detail analysis".tr(context),
+                  style: const TextStyle(
                     fontSize: 14,
                     color: AppTheme.onSurfaceVariant,
                   ),
@@ -119,13 +122,13 @@ class _HealthAnalysisViewState extends State<HealthAnalysisView> with SingleTick
                 if (viewModel.state == AnalysisState.error)
                   Center(
                     child: Text(
-                      'Lỗi: ${viewModel.errorMessage}',
+                      '${'Error'.tr(context)}: ${viewModel.errorMessage}',
                       style: const TextStyle(color: AppTheme.error),
                     ),
                   ),
 
                 if (viewModel.state == AnalysisState.success && viewModel.result != null)
-                  _buildAnalysisResults(viewModel.result!),
+                  _buildAnalysisResults(context, viewModel.result!),
 
                 const SizedBox(height: 32),
 
@@ -218,7 +221,7 @@ class _HealthAnalysisViewState extends State<HealthAnalysisView> with SingleTick
                     const Icon(Icons.center_focus_strong, color: Colors.white, size: 12),
                     const SizedBox(width: 4),
                     Text(
-                      'AI Khớp: ${viewModel.result!.matchPercentage}%',
+                      '${'AI Match'.tr(context)}: ${viewModel.result!.matchPercentage}%',
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 11,
@@ -260,7 +263,8 @@ class _HealthAnalysisViewState extends State<HealthAnalysisView> with SingleTick
     );
   }
 
-  Widget _buildAnalysisResults(AIAnalysisResult result) {
+  Widget _buildAnalysisResults(BuildContext context, AIAnalysisResult result) {
+    final lang = context.watch<SettingsViewModel>().currentLanguage;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -287,16 +291,16 @@ class _HealthAnalysisViewState extends State<HealthAnalysisView> with SingleTick
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      "Chẩn đoán hiện tại",
-                      style: TextStyle(
+                    Text(
+                      "Current Diagnosis".tr(context),
+                      style: const TextStyle(
                         fontSize: 14,
                         color: AppTheme.onSurfaceVariant,
                       ),
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      result.diseaseName,
+                      result.diseaseName.get(lang),
                       style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.w600,
@@ -318,7 +322,7 @@ class _HealthAnalysisViewState extends State<HealthAnalysisView> with SingleTick
                     const Icon(Icons.warning, size: 16, color: AppTheme.onErrorContainer),
                     const SizedBox(width: 6),
                     Text(
-                      result.severity,
+                      result.severity.get(lang),
                       style: const TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w500,
@@ -335,88 +339,84 @@ class _HealthAnalysisViewState extends State<HealthAnalysisView> with SingleTick
         const SizedBox(height: 16),
 
         // Insights & Advice Bento Grid
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             // AI Insights
-            Expanded(
-              child: Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: AppTheme.surfaceContainerLowest,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: AppTheme.surfaceContainer),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Row(
-                      children: [
-                        Icon(Icons.psychology, color: AppTheme.primary, size: 20),
-                        SizedBox(width: 8),
-                        Text(
-                          "THÔNG TIN TỪ AI",
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w500,
-                            letterSpacing: 1.0,
-                            color: AppTheme.primary,
-                          ),
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: AppTheme.surfaceContainerLowest,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: AppTheme.surfaceContainer),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      const Icon(Icons.psychology, color: AppTheme.primary, size: 20),
+                      const SizedBox(width: 8),
+                      Text(
+                        "AI INSIGHT".tr(context),
+                        style: const TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                          letterSpacing: 1.0,
+                          color: AppTheme.primary,
                         ),
-                      ],
-                    ),
-                    const SizedBox(height: 12),
-                    Text(
-                      result.aiInsight,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        height: 1.5,
-                        color: AppTheme.onSurface,
                       ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    result.aiInsight.get(lang),
+                    style: const TextStyle(
+                      fontSize: 14,
+                      height: 1.5,
+                      color: AppTheme.onSurface,
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
-            const SizedBox(width: 16),
+            const SizedBox(height: 16),
             // Expert Advice
-            Expanded(
-              child: Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: AppTheme.secondaryContainer.withValues(alpha: 0.4),
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: AppTheme.secondaryContainer.withValues(alpha: 0.6)),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Row(
-                      children: [
-                        Icon(Icons.lightbulb, color: AppTheme.secondary, size: 20),
-                        SizedBox(width: 8),
-                        Text(
-                          "LỜI KHUYÊN CHUYÊN GIA",
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w500,
-                            letterSpacing: 1.0,
-                            color: AppTheme.secondary,
-                          ),
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: AppTheme.secondaryContainer.withValues(alpha: 0.4),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: AppTheme.secondaryContainer.withValues(alpha: 0.6)),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      const Icon(Icons.lightbulb, color: AppTheme.secondary, size: 20),
+                      const SizedBox(width: 8),
+                      Text(
+                        "EXPERT ADVICE".tr(context),
+                        style: const TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                          letterSpacing: 1.0,
+                          color: AppTheme.secondary,
                         ),
-                      ],
-                    ),
-                    const SizedBox(height: 12),
-                    Text(
-                      result.expertAdvice,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        height: 1.5,
-                        color: AppTheme.onSurfaceVariant,
                       ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    result.expertAdvice.get(lang),
+                    style: const TextStyle(
+                      fontSize: 14,
+                      height: 1.5,
+                      color: AppTheme.onSurfaceVariant,
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ],
@@ -435,16 +435,16 @@ class _HealthAnalysisViewState extends State<HealthAnalysisView> with SingleTick
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                "Kế hoạch hành động",
-                style: TextStyle(
+              Text(
+                "Action Plan".tr(context),
+                style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w600,
                   color: AppTheme.onSurface,
                 ),
               ),
               const SizedBox(height: 16),
-              ...result.actionPlan.map((action) {
+              ...result.actionPlan.get(lang).map((action) {
                 final parts = action.split('|');
                 final title = parts.isNotEmpty ? parts[0] : '';
                 final desc = parts.length > 1 ? parts[1] : '';
@@ -507,14 +507,14 @@ class _HealthAnalysisViewState extends State<HealthAnalysisView> with SingleTick
               ),
               elevation: 4,
             ),
-            child: const Row(
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.add_a_photo),
-                SizedBox(width: 8),
+                const Icon(Icons.add_a_photo),
+                const SizedBox(width: 8),
                 Text(
-                  "Chụp ảnh mới",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                  "Take new photo".tr(context),
+                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                 ),
               ],
             ),
@@ -533,14 +533,14 @@ class _HealthAnalysisViewState extends State<HealthAnalysisView> with SingleTick
                 borderRadius: BorderRadius.circular(28),
               ),
             ),
-            child: const Row(
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.save),
-                SizedBox(width: 8),
+                const Icon(Icons.save),
+                const SizedBox(width: 8),
                 Text(
-                  "Lưu báo cáo",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                  "Save report".tr(context),
+                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                 ),
               ],
             ),

@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'dart:ui';
 import '../theme/app_theme.dart';
 import '../viewmodels/auth_viewmodel.dart';
+import '../l10n/app_translations.dart';
 
 class ResetPasswordView extends StatefulWidget {
   const ResetPasswordView({super.key});
@@ -22,14 +23,14 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
     final password = _passwordController.text;
 
     if (token.isEmpty || password.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Vui lòng điền đủ thông tin')));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Please fill all fields'.tr(context))));
       return;
     }
 
     try {
       await authVM.resetPassword(token, password);
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Đổi mật khẩu thành công!')));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Password changed successfully!'.tr(context))));
         Navigator.pushReplacementNamed(context, '/login');
       }
     } catch (e) {
@@ -89,26 +90,26 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
                         children: [
                           const Icon(Icons.lock_reset, color: AppTheme.primary, size: 48),
                           const SizedBox(height: 16),
-                          const Text(
-                            'Đặt lại mật khẩu mới',
-                            style: TextStyle(
+                          Text(
+                            'Set New Password'.tr(context),
+                            style: const TextStyle(
                               color: AppTheme.onSurface,
                               fontSize: 24,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                           const SizedBox(height: 8),
-                          const Text(
-                            'Vui lòng kiểm tra email của bạn để lấy mã token đặt lại mật khẩu.',
+                          Text(
+                            'Please check your email for the password reset token.'.tr(context),
                             textAlign: TextAlign.center,
-                            style: TextStyle(color: AppTheme.onSurfaceVariant),
+                            style: const TextStyle(color: AppTheme.onSurfaceVariant),
                           ),
                           const SizedBox(height: 32),
 
                           TextFormField(
                             controller: _tokenController,
                             decoration: InputDecoration(
-                              hintText: 'Nhập Token',
+                              hintText: 'Enter Token'.tr(context),
                               prefixIcon: const Icon(Icons.vpn_key, color: AppTheme.outline),
                               filled: true,
                               fillColor: Colors.white,
@@ -123,7 +124,7 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
                             controller: _passwordController,
                             obscureText: _obscurePassword,
                             decoration: InputDecoration(
-                              hintText: 'Mật khẩu mới',
+                              hintText: 'New Password'.tr(context),
                               prefixIcon: const Icon(Icons.lock, color: AppTheme.outline),
                               suffixIcon: IconButton(
                                 icon: Icon(
@@ -158,14 +159,14 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
                             ),
                             child: authVM.isLoading 
                               ? const CircularProgressIndicator(color: Colors.white)
-                              : const Text('Xác nhận', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                              : Text('Confirm'.tr(context), style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                           ),
                           const SizedBox(height: 16),
                           TextButton(
                             onPressed: () {
                               Navigator.pushReplacementNamed(context, '/login');
                             },
-                            child: const Text('Hủy & Quay lại đăng nhập'),
+                            child: Text('Cancel & Back to Login'.tr(context)),
                           )
                         ],
                       ),
