@@ -38,7 +38,7 @@ class HealthAnalysisViewModel extends ChangeNotifier {
       _state = AnalysisState.success;
     } catch (e) {
       _state = AnalysisState.error;
-      _errorMessage = e.toString();
+      _errorMessage = e.toString().replaceAll('Exception: ', '');
     } finally {
       notifyListeners();
     }

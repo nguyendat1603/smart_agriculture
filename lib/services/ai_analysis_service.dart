@@ -75,7 +75,7 @@ class AIAnalysisService {
     }
 
     try {
-      // Khởi tạo model Gemini (khuyến nghị dùng gemini-1.5-flash cho nhận diện ảnh)
+      // Khởi tạo model Gemini
       final model = GenerativeModel(model: 'gemini-3.5-flash', apiKey: apiKey);
 
       // Đọc file ảnh dưới dạng bytes
@@ -134,7 +134,33 @@ Hãy trả về ĐÚNG định dạng JSON như sau, không kèm bất kỳ form
       }
     } catch (e) {
       developer.log('AI Error: $e');
-      throw Exception("Lỗi khi kết nối với AI: $e");
+      String errorMsg = e.toString();
+      if (e is GenerativeAIException) {
+        if (errorMsg.contains('503') ||
+            errorMsg.contains('UNAVAILABLE') ||
+            errorMsg.contains('high demand')) {
+          throw Exception(
+            "Hệ thống AI đang quá tải do nhu cầu sử dụng cao. Vui lòng thử lại sau ít phút.",
+          );
+        } else if (errorMsg.contains('API key not valid')) {
+          throw Exception(
+            "Lỗi xác thực API Key. Vui lòng kiểm tra lại cấu hình.",
+          );
+        } else {
+          throw Exception("Lỗi từ hệ thống AI: ${e.message}");
+        }
+      } else if (errorMsg.contains('SocketException') ||
+          errorMsg.contains('Failed host lookup')) {
+        throw Exception(
+          "Không thể kết nối mạng. Vui lòng kiểm tra kết nối internet của bạn.",
+        );
+      } else if (errorMsg.contains('503') || errorMsg.contains('high demand')) {
+        throw Exception(
+          "Hệ thống AI đang quá tải do nhu cầu sử dụng cao. Vui lòng thử lại sau ít phút.",
+        );
+      }
+
+      throw Exception("Lỗi khi kết nối với AI: $errorMsg");
     }
   }
 
@@ -147,22 +173,30 @@ Hãy trả về ĐÚNG định dạng JSON như sau, không kèm bất kỳ form
         "Virus khảm không có thuốc đặc trị. Biện pháp tốt nhất là phòng ngừa. Khử trùng nghiêm ngặt toàn bộ nông cụ cắt tỉa bằng dung dịch natri hypochlorite 10% để cắt đứt nguồn lây lan cơ học. (LƯU Ý: Đây là dữ liệu mẫu vì bạn chưa cài GEMINI_API_KEY).";
 
     return AIAnalysisResult(
-      diseaseName: MultiLangString(vi: "Bệnh Khảm Lá (Mosaic Virus)", ja: "モザイク病"),
+      diseaseName: MultiLangString(
+        vi: "Bệnh Khảm Lá (Mosaic Virus)",
+        ja: "モザイク病",
+      ),
       severity: MultiLangString(vi: "Nghiêm trọng", ja: "重度"),
       matchPercentage: 96.4,
-      aiInsight: MultiLangString(vi: insightText, ja: "コンピュータビジョンシステムは、葉の表面に不規則な黄色い斑点と形態学的変形を検出しました。"),
-      expertAdvice: MultiLangString(vi: adviceText, ja: "モザイクウイルスには特効薬がありません。予防が最善の策です。"),
+      aiInsight: MultiLangString(
+        vi: insightText,
+        ja: "コンピュータビジョンシステムは、葉の表面に不規則な黄色い斑点と形態学的変形を検出しました。",
+      ),
+      expertAdvice: MultiLangString(
+        vi: adviceText,
+        ja: "モザイクウイルスには特効薬がありません。予防が最善の策です。",
+      ),
       actionPlan: MultiLangList(
         vi: [
           "Cách ly cây bệnh tức thì|Nhổ bỏ và tiêu hủy an toàn các cá thể nhiễm bệnh để ngăn virus lây lan sang các luống cây khỏe mạnh kế cận.",
-          "Sử dụng thuốc diệt côn trùng|Áp dụng chế phẩm sinh học diệt rệp sáp và bọ phấn trắng (vector chính truyền bệnh) trên toàn bộ khu vực bị ảnh hưởng."
+          "Sử dụng thuốc diệt côn trùng|Áp dụng chế phẩm sinh học diệt rệp sáp và bọ phấn trắng (vector chính truyền bệnh) trên toàn bộ khu vực bị ảnh hưởng.",
         ],
         ja: [
           "直ちに隔離する|健康な植物への感染を防ぐため、感染した個体を安全に処分してください。",
-          "殺虫剤を使用する|感染した領域全体にコナジラミ（主要な媒介昆虫）を殺すための生物学的製剤を適用してください。"
-        ]
+          "殺虫剤を使用する|感染した領域全体にコナジラミ（主要な媒介昆虫）を殺すための生物学的製剤を適用してください。",
+        ],
       ),
     );
   }
-
 }

@@ -3,8 +3,8 @@
 #include "DHT.h"
 
 // --- 1. THÔNG TIN KẾT NỐI ---
-#define WIFI_SSID "PP"
-#define WIFI_PASSWORD "password"
+#define WIFI_SSID "OPPO Reno6 Pro+ 5G"
+#define WIFI_PASSWORD "datcoi123"
 #define FIREBASE_HOST "project1-bacb2-default-rtdb.asia-southeast1.firebasedatabase.app" 
 #define FIREBASE_AUTH "UB3BdYevfZyBopccijM2qVJHLhJlS98uW7F9ZkFG"
 
