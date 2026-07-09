@@ -3,8 +3,6 @@
 #include "DHT.h"
 
 // --- 1. THÔNG TIN KẾT NỐI ---
-#define WIFI_SSID "OPPO Reno6 Pro+ 5G"
-#define WIFI_PASSWORD "datcoi123"
 #define FIREBASE_HOST "project1-bacb2-default-rtdb.asia-southeast1.firebasedatabase.app" 
 #define FIREBASE_AUTH "UB3BdYevfZyBopccijM2qVJHLhJlS98uW7F9ZkFG"
 
@@ -25,18 +23,59 @@ unsigned long lastPumpCheckTime = 0;
 const long pumpCheckInterval = 1000; // Kiểm tra lệnh bơm từ App (1 giây / lần)
 const long logInterval = 10000;      // Đẩy dữ liệu cảm biến lên App (10 giây / lần)
 
+void connectToFreeWiFi() {
+  WiFi.mode(WIFI_STA);
+  WiFi.disconnect();
+  delay(100);
+  
+  while (WiFi.status() != WL_CONNECTED) {
+    Serial.println("Dang quet cac mang WiFi...");
+    int n = WiFi.scanNetworks();
+    
+    if (n == 0) {
+      Serial.println("Khong tim thay mang WiFi nao. Thu lai sau 5 giay...");
+      delay(5000);
+    } else {
+      Serial.print(n);
+      Serial.println(" mang WiFi duoc tim thay.");
+      for (int i = 0; i < n; ++i) {
+        if (WiFi.encryptionType(i) == WIFI_AUTH_OPEN) {
+          Serial.print("Thu ket noi voi mang MỞ: ");
+          Serial.println(WiFi.SSID(i));
+          
+          WiFi.begin(WiFi.SSID(i).c_str());
+          
+          int attempts = 0;
+          // Chờ kết nối (tối đa 10 giây cho mỗi mạng)
+          while (WiFi.status() != WL_CONNECTED && attempts < 20) {
+            delay(500);
+            Serial.print(".");
+            attempts++;
+          }
+          
+          if (WiFi.status() == WL_CONNECTED) {
+            Serial.println("\nDa ket noi WiFi thanh cong!");
+            Serial.print("SSID: ");
+            Serial.println(WiFi.SSID(i));
+            Serial.print("IP: ");
+            Serial.println(WiFi.localIP());
+            return; // Thoát hàm khi kết nối thành công
+          }
+          Serial.println("\nKet noi that bai. Thu mang khac...");
+        }
+      }
+      Serial.println("\nKhong the ket noi den bat ky mang WiFi MỞ nao. Thu lai sau 5 giay...");
+      delay(5000);
+    }
+  }
+}
+
 void setup() {
   Serial.begin(115200);
   dht.begin();
 
-  // Kết nối WiFi
-  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
-  Serial.print("Dang ket noi WiFi");
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
-    Serial.print(".");
-  }
-  Serial.println("\nDa ket noi WiFi!");
+  // Tìm và kết nối đến mạng WiFi MỞ (không mật khẩu) gần nhất
+  connectToFreeWiFi();
 
   // Cấu hình Firebase
   config.host = FIREBASE_HOST;
@@ -50,6 +89,12 @@ void setup() {
 }
 
 void loop() {
+  // Nếu mất WiFi, tiến hành quét và kết nối lại mạng mở
+  if (WiFi.status() != WL_CONNECTED) {
+    Serial.println("Mat ket noi WiFi! Tien hanh tim mang MỞ khac...");
+    connectToFreeWiFi();
+  }
+
   unsigned long currentMillis = millis();
 
   // ---------------------------------------------------------
